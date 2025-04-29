@@ -109,6 +109,7 @@ preprocess_data.py
 res/
 adj.md
 tensorrt/build/*
+datasets/annotations/*
 datasets/coco/train.txt
 datasets/coco/val.txt
 datasets/ade20k/train.txt
