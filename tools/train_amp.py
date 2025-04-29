@@ -28,6 +28,7 @@ from lib.lr_scheduler import WarmupPolyLrScheduler
 from lib.meters import TimeMeter, AvgMeter
 from lib.logger import setup_logger, log_msg
 
+from tqdm import tqdm
 
 
 ## fix all random seeds
@@ -152,7 +153,7 @@ def train():
         warmup_ratio=0.1, warmup='exp', last_epoch=-1,)
 
     ## train loop
-    for it, (im, lb) in enumerate(dl):
+    for it, (im, lb) in tqdm(enumerate(dl), total=len(dl)):
         im = im.cuda()
         lb = lb.cuda()
 
