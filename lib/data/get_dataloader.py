@@ -9,6 +9,7 @@ from lib.data.sampler import RepeatedDistSampler
 from lib.data.cityscapes_cv2 import CityScapes
 from lib.data.coco import CocoStuff
 from lib.data.coco_accessibility import CocoStuffAccessibility
+from lib.data.coco_custom_edge_mapping import CocoStuffAccessibilityCustomEdgeMapping
 from lib.data.ade20k import ADE20k
 from lib.data.customer_dataset import CustomerDataset
 

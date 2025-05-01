@@ -44,20 +44,28 @@ cocoStuff_continuous_dict = {0:0, 1:1, 2:2, 3:3, 4:4, 6:5, 7:6, 8:7,
                   161:46, 162:47, 164:48, 169:49, 171: 50, 172:50, 
                   173:50, 174:50, 175:50, 176:50, 177:50, 178:51, 182:52 }
 
+custom_to_cocoStuff_dict = {0:41, 1:35, 2:19, 3:50, 4:24, 5:0, 6:8, 7:11, 8:31, 9:27,
+                            10:0, 11:1, 12:1, 13:3, 14:12, 15:5, 16:6, 17:2, 18:2, 19:0}
 
-class CocoStuffAccessibility(BaseDataset):
+custom_id_to_class = {0: 'road', 1: 'sidewalk', 2: 'building', 3: 'wall', 4: 'fence', 5: 'pole', 6: 'traffic light',
+                7: 'traffic sign', 8: 'vegetation', 9: 'terrain', 10: 'sky', 11: 'person', 12: 'rider', 13: 'car',
+                14: 'truck', 15: 'bus', 16: 'train', 17: 'motorcycle', 18: 'bicycle', 19: 'undefined', 20:'road marking', 
+                21:'footpath', 22:'pedestrian traffic light',23:'curb',24:'lowered curb',25:'covered bus station',
+                26:'bench',27:'wheeled pedestrian'}
+
+class CocoStuffAccessibilityCustomEdgeMapping(BaseDataset):
 
     def __init__(self, dataroot, annpath, trans_func=None, mode='train'):
-        super(CocoStuffAccessibility, self).__init__(
+        super(CocoStuffAccessibilityCustomEdgeMapping, self).__init__(
                 dataroot, annpath, trans_func, mode)
-        self.n_cats = 171 # equal to length of cocoStuff_continuous_dict
+        self.n_cats = 171 # actually 53: equal to length of cocoStuff_continuous_dict
         self.lb_ignore = 255
 
         ## label mapping, map cocoStuff to cocoStuff with accessibility (use cocoStuff_continuous_dict)
         self.lb_map = np.arange(256)
         for ind in range(256):
-            if ind in cocoStuff_continuous_dict.keys():
-                self.lb_map[ind] = cocoStuff_continuous_dict[ind]
+            if ind in custom_to_cocoStuff_dict.keys():
+                self.lb_map[ind] = custom_to_cocoStuff_dict[ind]
             else:
                 self.lb_map[ind] = self.lb_ignore
 
