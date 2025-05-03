@@ -2,7 +2,7 @@
 ## bisenetv2
 cfg = dict(
     model_type='bisenetv2',
-    n_cats=171,
+    n_cats=53,
     num_aux_heads=4,
     lr_start=5e-3,
     weight_decay=1e-4,
@@ -20,5 +20,5 @@ cfg = dict(
     eval_ims_per_gpu=1,
     use_fp16=True,
     use_sync_bn=True,
-    respth='./res/coco_accessibility',
+    respth='./res/coco_accessibility_2',
 )

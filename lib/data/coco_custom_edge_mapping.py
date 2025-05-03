@@ -58,7 +58,7 @@ class CocoStuffAccessibilityCustomEdgeMapping(BaseDataset):
     def __init__(self, dataroot, annpath, trans_func=None, mode='train'):
         super(CocoStuffAccessibilityCustomEdgeMapping, self).__init__(
                 dataroot, annpath, trans_func, mode)
-        self.n_cats = 171 # actually 53: equal to length of cocoStuff_continuous_dict
+        self.n_cats = 53 # actually 53: equal to length of cocoStuff_continuous_dict
         self.lb_ignore = 255
 
         ## label mapping, map cocoStuff to cocoStuff with accessibility (use cocoStuff_continuous_dict)
