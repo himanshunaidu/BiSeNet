@@ -1,5 +1,8 @@
 #!/usr/bin/python
 # -*- encoding: utf-8 -*-
+"""
+This file will be used for specific hyper-parameter tuning, where fw_miou is the main metric.
+"""
 
 import sys
 sys.path.insert(0, '.')
@@ -22,42 +25,48 @@ import torch.cuda.amp as amp
 from lib.models import model_factory
 from configs import set_cfg_from_file
 from lib.data import get_data_loader
-from evaluate import eval_model
+from evaluate import eval_model, get_eval_model_results_single_scale
 from lib.ohem_ce_loss import OhemCELoss
 from lib.lr_scheduler import WarmupPolyLrScheduler
 from lib.meters import TimeMeter, AvgMeter
-from lib.logger import setup_logger, log_msg
+# from lib.logger import setup_logger, log_msg
+from lib.logger import log_msg
 
 from tqdm import tqdm
 
+def setup_logger(name, logpth):
+    """
+    Overriding the default setup_logger function to prevent logging to a file.
+    Instead, it will only log to the console.
+    """
+    FORMAT = '%(levelname)s %(filename)s(%(lineno)d): %(message)s'
+    log_level = logging.INFO
+    if dist.is_initialized() and dist.get_rank() != 0:
+        log_level = logging.WARNING
+    try:
+        logging.basicConfig(level=log_level, format=FORMAT, force=True)
+    except Exception:
+        for hl in logging.root.handlers: logging.root.removeHandler(hl)
+        logging.basicConfig(level=log_level, format=FORMAT)
+    logging.root.addHandler(logging.StreamHandler())
 
-## fix all random seeds
-#  torch.manual_seed(123)
-#  torch.cuda.manual_seed(123)
-#  np.random.seed(123)
-#  random.seed(123)
-#  torch.backends.cudnn.deterministic = True
-#  torch.backends.cudnn.benchmark = True
-#  torch.multiprocessing.set_sharing_strategy('file_system')
+# def parse_args():
+#     parse = argparse.ArgumentParser()
+#     parse.add_argument('--config', dest='config', type=str,
+#             default='configs/bisenetv2.py',)
+#     parse.add_argument('--finetune-from', type=str, default=None,)
+#     return parse.parse_args()
+
+# args = parse_args()
+# cfg = set_cfg_from_file(args.config)
 
 
-def parse_args():
-    parse = argparse.ArgumentParser()
-    parse.add_argument('--config', dest='config', type=str,
-            default='configs/bisenetv2.py',)
-    parse.add_argument('--finetune-from', type=str, default=None,)
-    return parse.parse_args()
-
-args = parse_args()
-cfg = set_cfg_from_file(args.config)
-
-
-def set_model(lb_ignore=255):
+def set_model(cfg, lb_ignore=255):
     logger = logging.getLogger()
     net = model_factory[cfg.model_type](cfg.n_cats)
-    if not args.finetune_from is None:
-        logger.info(f'load pretrained weights from {args.finetune_from}')
-        msg = net.load_state_dict(torch.load(args.finetune_from,
+    if not cfg.finetune_from is None:
+        logger.info(f'load pretrained weights from {cfg.finetune_from}')
+        msg = net.load_state_dict(torch.load(cfg.finetune_from,
             map_location='cpu'), strict=False)
         logger.info('\tmissing keys: ' + json.dumps(msg.missing_keys))
         logger.info('\tunexpected keys: ' + json.dumps(msg.unexpected_keys))
@@ -70,7 +79,7 @@ def set_model(lb_ignore=255):
     return net, criteria_pre, criteria_aux
 
 
-def set_optimizer(model):
+def set_optimizer(cfg, model):
     if hasattr(model, 'get_params'):
         wd_params, nowd_params, lr_mul_wd_params, lr_mul_nowd_params = model.get_params()
         #  wd_val = cfg.weight_decay
@@ -101,7 +110,7 @@ def set_optimizer(model):
     return optim
 
 
-def set_model_dist(net):
+def set_model_dist(cfg, net):
     """
     Set the model to distributed mode.
     Is not required in the case of single GPU training.
@@ -116,7 +125,7 @@ def set_model_dist(net):
     return net
 
 
-def set_meters():
+def set_meters(cfg):
     time_meter = TimeMeter(cfg.max_iter)
     loss_meter = AvgMeter('loss')
     loss_pre_meter = AvgMeter('loss_prem')
@@ -126,26 +135,26 @@ def set_meters():
 
 
 
-def train():
+def train(cfg):
     logger = logging.getLogger()
 
     ## dataset
     dl = get_data_loader(cfg, mode='train')
 
     ## model
-    net, criteria_pre, criteria_aux = set_model(dl.dataset.lb_ignore)
+    net, criteria_pre, criteria_aux = set_model(cfg, dl.dataset.lb_ignore)
 
     ## optimizer
-    optim = set_optimizer(net)
+    optim = set_optimizer(cfg, net)
 
     ## mixed precision training
     scaler = amp.GradScaler()
 
     ## ddp training
-    net = set_model_dist(net)
+    net = set_model_dist(cfg, net)
 
     ## meters
-    time_meter, loss_meter, loss_pre_meter, loss_aux_meters = set_meters()
+    time_meter, loss_meter, loss_pre_meter, loss_aux_meters = set_meters(cfg)
 
     ## lr scheduler
     lr_schdr = WarmupPolyLrScheduler(optim, power=0.9,
@@ -193,23 +202,20 @@ def train():
 
     logger.info('\nevaluating the final model')
     torch.cuda.empty_cache()
-    iou_heads, iou_content, f1_heads, f1_content = eval_model(cfg, net.module)
-    logger.info('\neval results of f1 score metric:')
-    logger.info('\n' + tabulate(f1_content, headers=f1_heads, tablefmt='orgtbl'))
-    logger.info('\neval results of miou metric:')
-    logger.info('\n' + tabulate(iou_content, headers=iou_heads, tablefmt='orgtbl'))
 
-    return
+    mious, fw_mious, cat_ious, f1_scores, macro_f1, micro_f1 = get_eval_model_results_single_scale(cfg, net.module)
+
+    return mious, fw_mious, cat_ious, f1_scores, macro_f1, micro_f1
 
 
-def main():
+def main(cfg):
     local_rank = int(os.environ['LOCAL_RANK'])
     torch.cuda.set_device(local_rank)
     dist.init_process_group(backend='nccl')
 
-    if not osp.exists(cfg.respth): os.makedirs(cfg.respth)
+    # if not osp.exists(cfg.respth): os.makedirs(cfg.respth)
     setup_logger(f'{cfg.model_type}-{cfg.dataset.lower()}-train', cfg.respth)
-    train()
+    return train(cfg)
 
 
 if __name__ == "__main__":
