@@ -405,6 +405,53 @@ def eval_model(cfg, net):
     net.aux_mode = org_aux
     return iou_heads, iou_content, f1_heads, f1_content
 
+@torch.no_grad()
+def get_eval_model_results_single_scale(cfg, net):
+    """
+    Get the evaluation results of the model.
+    Currently, only returns the results of the single scale evaluation.
+    Args:
+        cfg: The configuration object.
+        net: The model to be evaluated.
+    """
+    org_aux = net.aux_mode
+    net.aux_mode = 'eval'
+    net.eval()
+
+    is_dist = dist.is_initialized()
+    dl = get_data_loader(cfg, mode='val')
+    lb_ignore = dl.dataset.lb_ignore
+
+    heads, mious, fw_mious, cat_ious = [], [], [], []
+    f1_scores, macro_f1, micro_f1 = [], [], []
+    logger = logging.getLogger()
+
+    size_processor = SizePreprocessor(
+            cfg.get('eval_start_shape'),
+            cfg.get('eval_start_shortside'),
+            cfg.get('eval_start_longside'),
+            )
+
+    single_scale = MscEvalV0(
+            n_classes=cfg.n_cats,
+            scales=(1., ),
+            flip=False,
+            lb_ignore=lb_ignore,
+            size_processor=size_processor
+    )
+    logger.info('compute single scale metrics')
+    metrics = single_scale(net, dl)
+    heads.append('ss')
+    mious.append(metrics['miou'])
+    fw_mious.append(metrics['fw_miou'])
+    cat_ious.append(metrics['ious'])
+    f1_scores.append(metrics['f1_scores'])
+    macro_f1.append(metrics['macro_f1'])
+    micro_f1.append(metrics['micro_f1'])
+
+    net.aux_mode = org_aux
+    return mious, fw_mious, cat_ious, f1_scores, macro_f1, micro_f1
+
 
 def evaluate(cfg, weight_pth):
     logger = logging.getLogger()
