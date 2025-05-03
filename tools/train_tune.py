@@ -203,7 +203,7 @@ def train(cfg):
     logger.info('\nevaluating the final model')
     torch.cuda.empty_cache()
 
-    mious, fw_mious, cat_ious, f1_scores, macro_f1, micro_f1 = get_eval_model_results_single_scale(cfg, net, dl.dataset)
+    mious, fw_mious, cat_ious, f1_scores, macro_f1, micro_f1 = get_eval_model_results_single_scale(cfg, net.module)
 
     return mious, fw_mious, cat_ious, f1_scores, macro_f1, micro_f1
 

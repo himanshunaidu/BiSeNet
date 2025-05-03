@@ -52,3 +52,9 @@ NGPUS=1
 torchrun --nproc_per_node=$NGPUS tools/train_amp.py --config $cfg_file
 mv ./res/coco_accessibility_2/model_final.pth ./res/coco_accessibility_2/model_final_stage_1.pth
 torchrun --nproc_per_node=1 tools/train_amp.py --finetune-from ./res/coco_accessibility_2/model_final_stage_1.pth --config ./configs/bisenetv2_coco_accessibility_stage_2.py
+
+## Hyperparameter tuning
+export CUDA_VISIBLE_DEVICES=0
+cfg_file=configs/bisenetv2_coco_accessibility_stage_1.py
+NGPUS=1
+torchrun --nproc_per_node=$NGPUS tools/train_optuna.py --config $cfg_file
