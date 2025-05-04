@@ -63,6 +63,8 @@ def parse_args():
             help='number of warmup iterations')
     parse.add_argument('--max-iter', type=int, default=None,
             help='number of iterations for training')
+    parse.add_argument('--respth', type=str, default='res/optuna',
+            help='the path to save the trained model')
     return parse.parse_args()
 
 def override_cfg(cfg, args):
@@ -81,6 +83,9 @@ def override_cfg(cfg, args):
         cfg.warmup_iters = args.warmup_iters
     if args.max_iter is not None:
         cfg.max_iter = args.max_iter
+
+    if args.respth is not None:
+        cfg.respth = args.respth
     print('cfg:', cfg.__dict__)
     return cfg
 
