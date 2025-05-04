@@ -50,16 +50,39 @@ def setup_logger(name, logpth):
         logging.basicConfig(level=log_level, format=FORMAT)
     logging.root.addHandler(logging.StreamHandler())
 
-# def parse_args():
-#     parse = argparse.ArgumentParser()
-#     parse.add_argument('--config', dest='config', type=str,
-#             default='configs/bisenetv2.py',)
-#     parse.add_argument('--finetune-from', type=str, default=None,)
-#     return parse.parse_args()
+def parse_args():
+    parse = argparse.ArgumentParser()
+    parse.add_argument('--config', dest='config', type=str,
+            default='configs/bisenetv2_coco_accessibility_stage_1.py',)
+    parse.add_argument('--finetune-from', type=str, default=None,)
+    parse.add_argument('--lr-start', type=float, default=None,
+            help='learning rate for the first iteration')
+    parse.add_argument('--weight-decay', type=float, default=None,
+            help='weight decay for the optimizer')
+    parse.add_argument('--warmup-iters', type=int, default=None,
+            help='number of warmup iterations')
+    parse.add_argument('--max-iter', type=int, default=None,
+            help='number of iterations for training')
+    return parse.parse_args()
 
-# args = parse_args()
-# cfg = set_cfg_from_file(args.config)
-
+def override_cfg(cfg, args):
+    """
+    Override the default config with command line arguments.
+    """
+    if 'finetune_from' in args and args.finetune_from is not None:
+        cfg.finetune_from = args.finetune_from
+    else:
+        cfg.finetune_from = None
+    if args.lr_start is not None:
+        cfg.lr_start = args.lr_start
+    if args.weight_decay is not None:
+        cfg.weight_decay = args.weight_decay
+    if args.warmup_iters is not None:
+        cfg.warmup_iters = args.warmup_iters
+    if args.max_iter is not None:
+        cfg.max_iter = args.max_iter
+    print('cfg:', cfg.__dict__)
+    return cfg
 
 def set_model(cfg, lb_ignore=255):
     logger = logging.getLogger()
@@ -205,7 +228,14 @@ def train(cfg):
 
     mious, fw_mious, cat_ious, f1_scores, macro_f1, micro_f1 = get_eval_model_results_single_scale(cfg, net.module)
 
-    return mious, fw_mious, cat_ious, f1_scores, macro_f1, micro_f1
+    return {
+        'mious': mious,
+        'fw_mious': fw_mious,
+        'cat_ious': cat_ious,
+        'f1_scores': f1_scores,
+        'macro_f1': macro_f1,
+        'micro_f1': micro_f1
+    }
 
 
 def main(cfg):
@@ -213,10 +243,15 @@ def main(cfg):
     torch.cuda.set_device(local_rank)
     dist.init_process_group(backend='nccl')
 
-    # if not osp.exists(cfg.respth): os.makedirs(cfg.respth)
+    if not osp.exists(cfg.respth): os.makedirs(cfg.respth)
     setup_logger(f'{cfg.model_type}-{cfg.dataset.lower()}-train', cfg.respth)
-    return train(cfg)
+    result = train(cfg)
+    with open(osp.join(cfg.respth, 'result.json'), 'w') as f:
+        f.write(json.dumps(result, indent=4))
 
 
 if __name__ == "__main__":
-    main()
+    args = parse_args()
+    cfg = set_cfg_from_file(args.config)
+    cfg = override_cfg(cfg, args)
+    main(cfg)
