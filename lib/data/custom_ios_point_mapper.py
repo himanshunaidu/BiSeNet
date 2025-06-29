@@ -18,7 +18,7 @@ import lib.data.transform_cv2 as T
 from lib.data.base_dataset import BaseDataset
 
 '''
-The following dataset is used for COCO-Stuff dataset with an accessibility mapping.
+The following dataset is used for the custom annotated iOSPointMapper dataset with an accessibility mapping.
 '''
 
 cocoStuff_dict = {0:'background', 1:'person', 2:'bicycle', 3:'car', 4:'motorcycle', 6:'bus', 7:'train', 8:'truck',
@@ -69,23 +69,28 @@ cocoStuff_continuous_dict = {0:0, 1:1, 2:2, 3:3, 4:4, 6:5, 7:6, 8:7,
                   171:33, 172:33, 173:33, 174:33, 175:33, 176:33, 177:33, # wall
                   182:34 }
 
+ios_point_mapper_dict = {
+    0: 'background', 1: 'bicycle', 2: 'bike rack', 3: 'bridge', 4: 'building',
+    5: 'bus', 6: 'car', 7: 'dynamic', 8: 'fence', 9: 'ground',
+    10: 'guard rail', 11: 'motorcycle', 12: 'parking', 13: 'person',
+    14: 'pole', 15: 'rail track', 16: 'rider', 17: 'road',
+    18: 'sidewalk', 19: 'sky', 20: 'static',
+    21: 'terrain', 22: 'traffic light', 23: 'traffic sign',
+    24: 'train', 25: 'truck', 26: 'tunnel',
+    27: 'vegetation', 28: 'wall'
+}
+
 # The following dict is to map the custom classes to the continuous set of cocoStuff classes (cocoStuff_continuous_dict)
 # not the original cocostuff classes.
-custom_to_cocoStuff_dict = {0:27, 1:22, 2:16, 3:33, 4:20, 5:21, 6:8, 7:10, 8:15, 9:19,
-                            10:0, 11:1, 12:1, 13:3, 14:7, 15:5, 16:6, 17:4, 18:2, 19:0}
+ios_point_mapper_to_cocoStuff_dict = {0:0, 1:2, 2:0, 3:0, 4:16, 5:5, 6:3, 7:0, 8:20, 9:0, 10:25,
+                                      11:4, 12:0, 13:1, 14:21, 15:26, 16:1, 17:27, 18:22, 19:0, 20:0,
+                                      21:19, 22:8, 23:10, 24:6, 25:7, 26:0, 27:15, 28:33}
 
-custom_id_to_class = {0: 'road', 1: 'sidewalk', 2: 'building', 3: 'wall', 4: 'fence', 5: 'pole', 6: 'traffic light',
-                7: 'traffic sign', 8: 'vegetation', 9: 'terrain', 10: 'sky', 11: 'person', 12: 'rider', 13: 'car',
-                14: 'truck', 15: 'bus', 16: 'train', 17: 'motorcycle', 18: 'bicycle', 19: 'undefined', 
-                # 20:'road marking', 
-                # 21:'footpath', 22:'pedestrian traffic light',23:'curb',24:'lowered curb',25:'covered bus station',
-                # 26:'bench',27:'wheeled pedestrian'
-                }
 
-class CocoStuffAccessibilityCustomEdgeMapping2(BaseDataset):
+class CustomIOSPointMapper(BaseDataset):
 
     def __init__(self, dataroot, annpath, trans_func=None, mode='train'):
-        super(CocoStuffAccessibilityCustomEdgeMapping2, self).__init__(
+        super(CustomIOSPointMapper, self).__init__(
                 dataroot, annpath, trans_func, mode)
         self.n_cats = 35 # actually 35: equal to length of cocoStuff_continuous_dict
         self.lb_ignore = 255
@@ -93,8 +98,8 @@ class CocoStuffAccessibilityCustomEdgeMapping2(BaseDataset):
         ## label mapping, map cocoStuff to cocoStuff with accessibility (use cocoStuff_continuous_dict)
         self.lb_map = np.arange(256)
         for ind in range(256):
-            if ind in custom_to_cocoStuff_dict.keys():
-                self.lb_map[ind] = custom_to_cocoStuff_dict[ind]
+            if ind in ios_point_mapper_to_cocoStuff_dict.keys():
+                self.lb_map[ind] = ios_point_mapper_to_cocoStuff_dict[ind]
             else:
                 self.lb_map[ind] = self.lb_ignore
 
@@ -102,16 +107,17 @@ class CocoStuffAccessibilityCustomEdgeMapping2(BaseDataset):
             mean=(0.46962251, 0.4464104,  0.40718787), # coco, rgb
             std=(0.27469736, 0.27012361, 0.28515933),
         )
-    
 
 if __name__ == "__main__":
-    dataroot = '../../datasets/coco'
-    annpath = '../../datasets/coco/train.txt'
-    dataset = CocoStuffAccessibilityCustomEdgeMapping2(dataroot, annpath)
-
-    for i in range(10):
-        img, label = dataset[i]
-        print(img.shape, label.shape)
-        print(torch.unique(label))
+    dataroot = '../../datasets/ios_point_mapper/iOSPointMapper_1_Cityscapes'
+    annpath = '../../datasets/ios_point_mapper/iOSPointMapper_1_Cityscapes/dataset.txt'
+    dataset = CustomIOSPointMapper(dataroot, annpath)
+    print(f"Number of categories: {dataset.n_cats}")
+    print(f"Label mapping: {dataset.lb_map}")
+    print(f"To tensor transform: {dataset.to_tensor}")
     
-    print(dataset.lb_map)
+    # Example of how to use the dataset
+    dataloader = DataLoader(dataset, batch_size=4, shuffle=True)
+    for images, labels in dataloader:
+        print(f"Batch images shape: {images.shape}, labels shape: {labels.shape}")
+        break  # Just to show one batch
