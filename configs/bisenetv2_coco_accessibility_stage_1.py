@@ -4,13 +4,13 @@
 ## With batch size of 32, this would mean that the model is trained for around (150k * 32) / 118k ~= 40 epochs.
 cfg = dict(
     model_type='bisenetv2',
-    n_cats=53,
+    n_cats=35,
     num_aux_heads=4,
     lr_start=5e-3,
     weight_decay=1e-4,
     warmup_iters=1000,
     max_iter=150000,
-    dataset='CocoStuffAccessibility',
+    dataset='CocoStuffAccessibility2',
     im_root='./datasets/coco',
     train_im_anns='./datasets/coco/train.txt',
     val_im_anns='./datasets/coco/val.txt',
