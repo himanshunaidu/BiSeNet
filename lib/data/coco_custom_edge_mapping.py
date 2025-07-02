@@ -78,7 +78,7 @@ class CocoStuffAccessibilityCustomEdgeMapping(BaseDataset):
 if __name__ == "__main__":
     dataroot = '../../datasets/coco'
     annpath = '../../datasets/coco/train.txt'
-    dataset = CocoStuffAccessibility(dataroot, annpath)
+    dataset = CocoStuffAccessibilityCustomEdgeMapping(dataroot, annpath)
 
     for i in range(10):
         img, label = dataset[i]

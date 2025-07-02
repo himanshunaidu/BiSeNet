@@ -119,6 +119,7 @@ datasets/ade20k/val.txt
 datasets/cityscapes/*
 datasets/cityscapes_backup
 datasets/custom_edge_mapping
+datasets/ios_point_mapper
 pretrained/*
 run.sh
 openvino/build/*
