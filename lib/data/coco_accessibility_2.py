@@ -69,6 +69,18 @@ cocoStuff_continuous_dict = {0:0, 1:1, 2:2, 3:3, 4:4, 6:5, 7:6, 8:7,
                   171:33, 172:33, 173:33, 174:33, 175:33, 176:33, 177:33, # wall
                   182:34 }
 
+# The following dict maps the continuous labels to the class names
+cocoStuff_continuous_dict_inv = {}
+for k, v in cocoStuff_continuous_dict.items():
+    if v not in cocoStuff_continuous_dict_inv:
+        cocoStuff_continuous_dict_inv[v] = []
+    cocoStuff_continuous_dict_inv[v].append(cocoStuff_dict[k])
+print("CocoStuff continuous dict inverse:", cocoStuff_continuous_dict_inv)
+
+# CocoStuff continuous dict inverse: {0: ['background', 'ground-other'], 1: ['person'], 2: ['bicycle'], 3: ['car'], 4: ['motorcycle'], 5: ['bus'], 6: ['train'], 7: ['truck'], 8: ['traffic light'], 9: ['fire hydrant'], 10: ['street sign', 'stop sign'], 11: ['parking meter'], 12: ['bench'], 13: ['potted plant'], 14: ['banner'], 15: ['branch', 'bush', 'leaves', 'plant-other', 'tree'], 16: ['building-other', 'house'], 17: ['cage'], 18: ['cardboard'], 19: ['dirt', 'grass', 'gravel', 'moss', 'mud', 'sand', 'snow'], 20: ['fence'], 21: ['metal'], 22: ['pavement'], 23: ['platform'], 24: ['playfield'], 25: ['railing'], 26: ['railroad'], 27: ['road'], 28: ['rock'], 29: ['roof'], 30: ['stairs'], 31: ['stone'], 32: ['structural-other'], 33: ['wall-brick', 'wall-concrete', 'wall-other', 'wall-panel', 'wall-stone', 'wall-tile', 'wall-wood'], 34: ['wood']}
+
+exit(-1)
+
 
 class CocoStuffAccessibility2(BaseDataset):
 
