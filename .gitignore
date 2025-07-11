@@ -112,6 +112,7 @@ tensorrt/build/*
 lib/data/log
 datasets/annotations/*
 datasets/coco/*
+datasets/coco_subset/*
 datasets/coco/train.txt
 datasets/coco/val.txt
 datasets/ade20k/train.txt
