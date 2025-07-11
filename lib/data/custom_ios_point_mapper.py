@@ -55,19 +55,19 @@ cos2cocoStuff_dict = {0:149, 1:140, 2:96, 3:173, 4:113, 5:132, 6:10, 7:13, 8:129
 # terrain (19): 111, 124, 125, 126 (cancelled), 134, 136, 154, 159
 # building (16): 96, 128
 # wall (33): 171, 172, 173, 174, 175, 176, 177
-cocoStuff_continuous_dict = {0:0, 1:1, 2:2, 3:3, 4:4, 6:5, 7:6, 8:7,
-                  10:8, 11:9, 
-                  12:10, 13:10, # traffic sign
-                  14:11, 15:12, 64:13, 92:14, 
-                  94:15, 97:15, 129:15, 142:15, 169:15, # vegetation
-                  96:16, 128:16, # building
-                  99:17, 100:18, 
-                  111:19, 124:19, 125:19, 126:0, 134:19, 136:19, 154:19, 159:19, # terrain
-                  113:20, 132: 21, 140:22, 144:23,
-                  145:24, 146:25, 147:26, 149:27, 150:28, 151:29,
-                  161:30, 162:31, 164:32, 
-                  171:33, 172:33, 173:33, 174:33, 175:33, 176:33, 177:33, # wall
-                  182:34 }
+# cocoStuff_continuous_dict = {0:0, 1:1, 2:2, 3:3, 4:4, 6:5, 7:6, 8:7,
+#                   10:8, 11:9, 
+#                   12:10, 13:10, # traffic sign
+#                   14:11, 15:12, 64:13, 92:14, 
+#                   94:15, 97:15, 129:15, 142:15, 169:15, # vegetation
+#                   96:16, 128:16, # building
+#                   99:17, 100:18, 
+#                   111:19, 124:19, 125:19, 126:0, 134:19, 136:19, 154:19, 159:19, # terrain
+#                   113:20, 132: 21, 140:22, 144:23,
+#                   145:24, 146:25, 147:26, 149:27, 150:28, 151:29,
+#                   161:30, 162:31, 164:32, 
+#                   171:33, 172:33, 173:33, 174:33, 175:33, 176:33, 177:33, # wall
+#                   182:34 }
 
 ios_point_mapper_dict = {
     0: 'background', 1: 'bicycle', 2: 'bike rack', 3: 'bridge', 4: 'building',
@@ -82,9 +82,11 @@ ios_point_mapper_dict = {
 
 # The following dict is to map the custom classes to the continuous set of cocoStuff classes (cocoStuff_continuous_dict)
 # not the original cocostuff classes.
-ios_point_mapper_to_cocoStuff_dict = {0:0, 1:2, 2:0, 3:0, 4:16, 5:5, 6:3, 7:0, 8:20, 9:0, 10:25,
-                                      11:4, 12:0, 13:1, 14:21, 15:26, 16:1, 17:27, 18:22, 19:0, 20:0,
-                                      21:19, 22:8, 23:10, 24:6, 25:7, 26:0, 27:15, 28:33}
+# ios_point_mapper_to_cocoStuff_dict = {0:0, 1:2, 2:0, 3:0, 4:16, 5:5, 6:3, 7:0, 8:20, 9:0, 10:25,
+#                                       11:4, 12:0, 13:1, 14:21, 15:26, 16:1, 17:27, 18:22, 19:0, 20:0,
+#                                       21:19, 22:8, 23:10, 24:6, 25:7, 26:0, 27:15, 28:33}
+# Final classes: road, pavement, building, traffic light, traffic sign, pole, vegetation, terrain
+ios_point_mapper_to_cocoStuff_dict = {17:0, 18:1, 4:2, 22:3, 23:4, 14:5, 27:6, 21:7}
 
 
 class CustomIOSPointMapper(BaseDataset):
@@ -92,7 +94,7 @@ class CustomIOSPointMapper(BaseDataset):
     def __init__(self, dataroot, annpath, trans_func=None, mode='train'):
         super(CustomIOSPointMapper, self).__init__(
                 dataroot, annpath, trans_func, mode)
-        self.n_cats = 35 # actually 35: equal to length of cocoStuff_continuous_dict
+        self.n_cats = 8 # actually 35: equal to length of cocoStuff_continuous_dict
         self.lb_ignore = 255
 
         ## label mapping, map cocoStuff to cocoStuff with accessibility (use cocoStuff_continuous_dict)

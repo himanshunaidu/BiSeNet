@@ -53,6 +53,24 @@ custom_id_to_class = {0: 'road', 1: 'sidewalk', 2: 'building', 3: 'wall', 4: 'fe
                 21:'footpath', 22:'pedestrian traffic light',23:'curb',24:'lowered curb',25:'covered bus station',
                 26:'bench',27:'wheeled pedestrian'}
 
+# The following code maps the custom classes to the continuous set of cocoStuff classes and the original cocoStuff class names
+custom_to_cocoStuff_name_dict = {}
+for k, v in custom_to_cocoStuff_dict.items():
+    # if v in cocoStuff_continuous_dict.values():
+    # Find all the keys in cocoStuff_continuous_dict that map to v
+    coco_keys = [key for key, value in cocoStuff_continuous_dict.items() if value == v]
+    # Get the corresponding cocoStuff class names
+    coco_names = [cocoStuff_dict[key] for key in coco_keys]
+    custom_name = custom_id_to_class[k]
+    # Store the mapping
+    custom_to_cocoStuff_name_dict[k] = {
+        'name': custom_name,
+        'cocoStuff_id': v,
+        'cocoStuff_classes': [(coco_key, coco_name) for coco_key, coco_name in zip(coco_keys, coco_names)]
+    }
+# for k, v in custom_to_cocoStuff_name_dict.items():
+#     print(f"Custom ID {k} ({v['name']}) maps to cocoStuff ID {v['cocoStuff_id']} with classes: {v['cocoStuff_classes']}")
+
 class CocoStuffAccessibilityCustomEdgeMapping(BaseDataset):
 
     def __init__(self, dataroot, annpath, trans_func=None, mode='train'):

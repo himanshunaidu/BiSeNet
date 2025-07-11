@@ -63,7 +63,7 @@ cocoStuff_continuous_dict = {0:0, 1:1, 2:2, 3:3, 4:4, 6:5, 7:6, 8:7,
                   96:16, 128:16, # building
                   99:17, 100:18, 
                   111:19, 124:19, 125:19, 126:0, 134:19, 136:19, 154:19, 159:19, # terrain
-                  113:20, 132: 21, 140:22, 144:23,
+                  113:20, 132:21, 140:22, 144:23,
                   145:24, 146:25, 147:26, 149:27, 150:28, 151:29,
                   161:30, 162:31, 164:32, 
                   171:33, 172:33, 173:33, 174:33, 175:33, 176:33, 177:33, # wall
@@ -71,8 +71,10 @@ cocoStuff_continuous_dict = {0:0, 1:1, 2:2, 3:3, 4:4, 6:5, 7:6, 8:7,
 
 # The following dict is to map the custom classes to the continuous set of cocoStuff classes (cocoStuff_continuous_dict)
 # not the original cocostuff classes.
-custom_to_cocoStuff_dict = {0:27, 1:22, 2:16, 3:33, 4:20, 5:21, 6:8, 7:10, 8:15, 9:19,
-                            10:0, 11:1, 12:1, 13:3, 14:7, 15:5, 16:6, 17:4, 18:2, 19:0}
+# custom_to_cocoStuff_dict = {0:27, 1:22, 2:16, 3:33, 4:20, 5:21, 6:8, 7:10, 8:15, 9:19,
+#                             10:0, 11:1, 12:1, 13:3, 14:7, 15:5, 16:6, 17:4, 18:2, 19:0}
+# Final classes: road, pavement, building, traffic light, traffic sign, pole, vegetation, terrain
+custom_to_cocoStuff_dict = {0:0, 1:1, 2:2, 5:3, 6:4, 7:5, 8:6, 9:7}
 
 custom_id_to_class = {0: 'road', 1: 'sidewalk', 2: 'building', 3: 'wall', 4: 'fence', 5: 'pole', 6: 'traffic light',
                 7: 'traffic sign', 8: 'vegetation', 9: 'terrain', 10: 'sky', 11: 'person', 12: 'rider', 13: 'car',
@@ -82,30 +84,12 @@ custom_id_to_class = {0: 'road', 1: 'sidewalk', 2: 'building', 3: 'wall', 4: 'fe
                 # 26:'bench',27:'wheeled pedestrian'
                 }
 
-# The following code maps the custom classes to the continuous set of cocoStuff classes and the original cocoStuff class names
-custom_to_cocoStuff_name_dict = {}
-for k, v in custom_to_cocoStuff_dict.items():
-    # if v in cocoStuff_continuous_dict.values():
-    # Find all the keys in cocoStuff_continuous_dict that map to v
-    coco_keys = [key for key, value in cocoStuff_continuous_dict.items() if value == v]
-    # Get the corresponding cocoStuff class names
-    coco_names = [cocoStuff_dict[key] for key in coco_keys]
-    custom_name = custom_id_to_class[k]
-    # Store the mapping
-    custom_to_cocoStuff_name_dict[k] = {
-        'name': custom_name,
-        'cocoStuff_id': v,
-        'cocoStuff_classes': [(coco_key, coco_name) for coco_key, coco_name in zip(coco_keys, coco_names)]
-    }
-# for k, v in custom_to_cocoStuff_name_dict.items():
-#     print(f"Custom ID {k} ({v['name']}) maps to cocoStuff ID {v['cocoStuff_id']} with classes: {v['cocoStuff_classes']}")
-
 class CocoStuffAccessibilityCustomEdgeMapping2(BaseDataset):
 
     def __init__(self, dataroot, annpath, trans_func=None, mode='train'):
         super(CocoStuffAccessibilityCustomEdgeMapping2, self).__init__(
                 dataroot, annpath, trans_func, mode)
-        self.n_cats = 35 # actually 35: equal to length of cocoStuff_continuous_dict
+        self.n_cats = 8 # actually 35: equal to length of cocoStuff_continuous_dict
         self.lb_ignore = 255
 
         ## label mapping, map cocoStuff to cocoStuff with accessibility (use cocoStuff_continuous_dict)
