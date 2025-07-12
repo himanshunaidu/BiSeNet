@@ -22,5 +22,5 @@ cfg = dict(
     eval_ims_per_gpu=1,
     use_fp16=True,
     use_sync_bn=True,
-    respth='./res/bisenetv2_coco_accessibility_subset_stage_2',
+    respth='./res/bisenetv2_coco_accessibility_stage_2',
 )
