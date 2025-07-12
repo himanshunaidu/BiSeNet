@@ -12,7 +12,7 @@ import cv2
 import numpy as np
 
 import lib.data.transform_cv2 as T
-from lib.data.base_dataset import BaseDataset
+from lib.data.base_dataset import BaseDataset, BaseDatasetKwargs
 
 '''
 91(thing) + 91(stuff) = 182 classes, label proportions are:
@@ -46,9 +46,9 @@ from lib.data.base_dataset import BaseDataset
 
 class CocoStuff(BaseDataset):
 
-    def __init__(self, dataroot, annpath, trans_func=None, mode='train'):
+    def __init__(self, dataroot, annpath, trans_func=None, mode='train', **kwargs: BaseDatasetKwargs):
         super(CocoStuff, self).__init__(
-                dataroot, annpath, trans_func, mode)
+                dataroot, annpath, trans_func, mode, **kwargs)
         self.n_cats = 171 # 91 stuff, 91 thing, 11 of thing have no annos
         self.lb_ignore = 255
 

@@ -67,8 +67,9 @@ torchrun --nproc_per_node=$NGPUS tools/train_optuna.py --config $cfg_file
 export CUDA_VISIBLE_DEVICES=0
 cfg_file=configs/bisenetv2_coco_accessibility_stage_1.py
 NGPUS=1
-torchrun --nproc_per_node=$NGPUS tools/train_amp2.py --config $cfg_file
-# mv ./res/bisenetv2_coco_accessibility_stage_1/model_final.pth ./res/bisenetv2_coco_accessibility_stage_2/model_final.pth
+torchrun --nproc_per_node=$NGPUS tools/train_amp2.py --config $cfg_file &&
+cp ./res/bisenetv2_coco_accessibility_stage_1/model_final.pth ./res/bisenetv2_coco_accessibility_stage_2 &&
+mv ./res/bisenetv2_coco_accessibility_stage_2/model_final.pth ./res/bisenetv2_coco_accessibility_stage_2/model_final_coco_accessibility_stage_1.pth &&
 export CUDA_VISIBLE_DEVICES=0
 cfg_file=configs/bisenetv2_coco_accessibility_stage_2.py
 NGPUS=1

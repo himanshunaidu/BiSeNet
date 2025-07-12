@@ -12,7 +12,7 @@ import cv2
 import numpy as np
 
 import lib.data.transform_cv2 as T
-from lib.data.base_dataset import BaseDataset
+from lib.data.base_dataset import BaseDataset, BaseDatasetKwargs
 
 
 labels_info = [
@@ -58,9 +58,9 @@ labels_info = [
 class CityScapes(BaseDataset):
     '''
     '''
-    def __init__(self, dataroot, annpath, trans_func=None, mode='train'):
+    def __init__(self, dataroot, annpath, trans_func=None, mode='train', **kwargs: BaseDatasetKwargs):
         super(CityScapes, self).__init__(
-                dataroot, annpath, trans_func, mode)
+                dataroot, annpath, trans_func, mode, **kwargs)
         self.n_cats = 19
         self.lb_ignore = 255
         self.lb_map = np.arange(256).astype(np.uint8)
