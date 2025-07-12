@@ -121,6 +121,7 @@ datasets/cityscapes/*
 datasets/cityscapes_backup
 datasets/custom_edge_mapping
 datasets/ios_point_mapper
+datasets/custom_images
 pretrained/*
 run.sh
 openvino/build/*

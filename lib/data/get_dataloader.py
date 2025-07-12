@@ -11,7 +11,7 @@ from lib.data.coco import CocoStuff
 from lib.data.coco_accessibility import CocoStuffAccessibility
 # from lib.data.coco_accessibility_2 import CocoStuffAccessibility2
 from lib.data.coco_custom_edge_mapping import CocoStuffAccessibilityCustomEdgeMapping
-from lib.data.coco_custom_edge_mapping_2 import CocoStuffAccessibilityCustomEdgeMapping2
+# from lib.data.coco_custom_edge_mapping_2 import CocoStuffAccessibilityCustomEdgeMapping2
 from lib.data.custom_ios_point_mapper import CustomIOSPointMapper
 from lib.data.ade20k import ADE20k
 from lib.data.customer_dataset import CustomerDataset

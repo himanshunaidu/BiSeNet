@@ -39,7 +39,7 @@ class CocoStuffAccessibility(BaseDataset):
         self.lb_ignore = kwargs.get('lb_ignore', 255)
 
         self.custom_mapping_dict = self._get_custom_mappings(**kwargs)
-        print(f"Using custom mapping: {custom_mapping} with {len(self.custom_mapping_dict)} classes.")
+        # print(f"Using custom mapping: {custom_mapping} with {len(self.custom_mapping_dict)} classes.")
 
         ## label mapping, map cocoStuff to cocoStuff with accessibility (use cocoStuff_continuous_dict)
         self.lb_map = np.arange(256)
