@@ -12,10 +12,11 @@ cocoStuff_dict = {0:'person', 1:'bicycle', 2:'car', 3:'motorcycle', 5:'bus', 6:'
                         123:'grass', 124:'gravel', 125:'ground-other',
                         127:'house', 128:'leaves', # 129:'light',
                         131: 'metal', 133:'moss', 135:'mud', 139:'pavement', 141:'plant-other', 143:'platform',
-                        144:'playfield', 145:'railing', 146:'railroad', 148:'road', 149:'rock', 150:'roof', 153:'sand', 158:'snow',
+                        144:'playingfield', 145:'railing', 146:'railroad', 148:'road', 149:'rock', 150:'roof', 153:'sand', 158:'snow',
                         160:'stairs', 161:'stone', 163:'structural-other', 168:'tree', 170: 'wall-brick', 171:'wall-concrete', 
                         172:'wall-other', 173:'wall-panel', 174:'wall-stone', 175:'wall-tile', 176:'wall-wood', # 177:'water-other', 
-                        181:'wood' }
+                        181:'wood',
+                        156: 'sky', 105: 'clouds'} # Extra class that are frequently present in outdoor environments.
 
 # This dictionary maps edge_mapping and cityscapes classes to COCO-Stuff classes.
 # Not in use, but kept for reference.
@@ -66,18 +67,23 @@ cocoStuff_continuous_35_dict = {
 }
 
 # The following dictionary is to map a very small relevant subset of cocostuff classes to a continuous set of labels.
-## Classes: road, sidewalk, building, pole, traffic light, traffic sign, vegetation, terrain, background
-cocoStuff_continuous_7_dict = {
-    148:0, 139:1,
+## Main classes: road, sidewalk, building, pole, traffic light, traffic sign, 
+## Context classes: vegetation, terrain, background
+## Extra static classes (high proportion): sky, clouds, playingfield, fence, wall-concrete
+## Extra dynamic classes (high proportion): person, bus, train, car, truck, motorcycle
+cocoStuff_continuous_main_dict = {
+    148:0, 139:1, # road, sidewalk
     95:2, 127:2, # building
-    131:3, 9:4,
+    131:3, 9:4, # pole, traffic light
     11:5, 12:5, # traffic sign
     93:6, 96:6, 128:6, 141:6, 168:6, # vegetation
     110:7, 123:7, 124:7, 125:7, 133:7, 135:7, 153:7, 158:7, # terrain
-    255:8  # Background is mapped to 255, which is not used in the continuous labels.
+    172:8, 173:8, 174:8, 175:8, 176:8, 177:8, 181:8, 156:8, 105:8, 144:8, 112:8, # static classes
+    0:9, 1:9, 2:9, 3:9, 4:9, 5:9, 6:9, 7:9, # dynamic classes
+    255:10  # Background is mapped to 255, which is not used in the continuous labels.
 }
 # Weight mapping for the continuous set of labels
-cocoStuff_continuous_7_weights = [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 0.1]  # Background has less weight
+cocoStuff_continuous_11_weights = [1.5, 3.0, 1.5, 2.5, 2.0, 2.0, 0.5, 0.5, 0.3, 0.3, 0.2] # Arbitrary weights for the classes in cocoStuff_continuous_main_dict
 
 # Map for cityscapes. Will later add remaining classes. 
 cocoStuff_cityscapes_dict = {

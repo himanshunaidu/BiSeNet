@@ -17,7 +17,7 @@ if __name__ == '__main__':
 import lib.data.transform_cv2 as T
 from lib.data.base_dataset import BaseDataset, BaseDatasetKwargs
 from lib.data.custom_maps.coco import cocoStuff_dict, cocoStuff_continuous_53_dict, cocoStuff_continuous_35_dict, \
-    cocoStuff_continuous_7_dict, cocoStuff_continuous_7_weights, cocoStuff_cityscapes_dict
+    cocoStuff_continuous_11_dict, cocoStuff_cityscapes_dict
 
 '''
 The following dataset is used for COCO-Stuff dataset with an accessibility mapping.
@@ -27,9 +27,8 @@ custom_mapping_dicts = {
     'city': cocoStuff_cityscapes_dict,
     '53': cocoStuff_continuous_53_dict,
     '35': cocoStuff_continuous_35_dict,
-    '7': cocoStuff_continuous_7_dict
+    '11': cocoStuff_continuous_11_dict
 }
-
 
 class CocoStuffAccessibility(BaseDataset):
 
@@ -38,14 +37,15 @@ class CocoStuffAccessibility(BaseDataset):
                 dataroot, annpath, trans_func, mode, **kwargs)
         self.n_cats = kwargs.get('n_cats', 53)
         self.lb_ignore = kwargs.get('lb_ignore', 255)
-        
-        
+
+        self.custom_mapping_dict = self._get_custom_mappings(**kwargs)
+        print(f"Using custom mapping: {custom_mapping} with {len(self.custom_mapping_dict)} classes.")
 
         ## label mapping, map cocoStuff to cocoStuff with accessibility (use cocoStuff_continuous_dict)
         self.lb_map = np.arange(256)
         for ind in range(256):
-            if ind in cocoStuff_continuous_dict.keys():
-                self.lb_map[ind] = cocoStuff_continuous_dict[ind]
+            if ind in self.custom_mapping_dict.keys():
+                self.lb_map[ind] = self.custom_mapping_dict[ind]
             else:
                 self.lb_map[ind] = self.lb_ignore
 
@@ -54,11 +54,23 @@ class CocoStuffAccessibility(BaseDataset):
             std=(0.27469736, 0.27012361, 0.28515933),
         )
     
+    def _get_custom_mappings(self, **kwargs):
+        """
+        Returns the custom mapping dictionary based on the provided key.
+        """
+        if kwargs.get('custom_mapping_dict') is not None:
+            return kwargs['custom_mapping_dict']
+        
+        custom_mapping_key = kwargs.get('custom_mapping_key', '53')
+        if custom_mapping_key not in custom_mapping_dicts:
+            raise ValueError(f"Invalid custom mapping key: {custom_mapping_key}. "
+                             f"Available keys are: {list(custom_mapping_dicts.keys())}")
+        return custom_mapping_dicts[custom_mapping_key]
 
 if __name__ == "__main__":
     dataroot = '../../datasets/coco'
     annpath = '../../datasets/coco/train.txt'
-    dataset = CocoStuffAccessibility(dataroot, annpath)
+    dataset = CocoStuffAccessibility(dataroot, annpath, custom_mapping_key='7')
 
     for i in range(10):
         img, label = dataset[i]
@@ -66,3 +78,6 @@ if __name__ == "__main__":
         print(torch.unique(label))
     
     print(dataset.lb_map)
+    # Get all non-255 label mappings
+    label_mappings = {i: int(dataset.lb_map[i]) for i in range(256) if dataset.lb_map[i] != 255}
+    print(label_mappings)

@@ -10,12 +10,14 @@ from torch.utils.data import Dataset, DataLoader
 import torch.distributed as dist
 import cv2
 import numpy as np
-from typing import TypedDict
+from typing import TypedDict, Optional
 
 class BaseDatasetKwargs(TypedDict, total=False):
     n_cats: int
     lb_ignore: int
-    custom_mapping_key: str
+    custom_mapping_key: Optional[str]
+    custom_mapping_weights: Optional[list[float]]
+    custom_mapping_dict: Optional[dict[int, int]]
 
 class BaseDataset(Dataset):
     '''
