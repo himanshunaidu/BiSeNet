@@ -15,7 +15,7 @@ if __name__ == '__main__':
     import sys
     sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 import lib.data.transform_cv2 as T
-from lib.data.base_dataset import BaseDataset
+from lib.data.base_dataset import BaseDataset, BaseDatasetKwargs
 
 '''
 The following dataset is used for COCO-Stuff dataset with an accessibility mapping.
@@ -86,9 +86,9 @@ for k, v in cocoStuff_continuous_dict.items():
 
 class CocoStuffAccessibility2(BaseDataset):
 
-    def __init__(self, dataroot, annpath, trans_func=None, mode='train'):
+    def __init__(self, dataroot, annpath, trans_func=None, mode='train', **kwargs: BaseDatasetKwargs):
         super(CocoStuffAccessibility2, self).__init__(
-                dataroot, annpath, trans_func, mode)
+                dataroot, annpath, trans_func, mode, **kwargs)
         self.n_cats = 8 # equal to length of cocoStuff_continuous_dict
         self.lb_ignore = 255
 

@@ -3,7 +3,7 @@ This script stores all the custom dictionaries for COCO-Stuff used for mapping c
 """
 
 # This dictionary stores the mapping of relevant COCO-Stuff dataset classes to their respective names.
-cocoStuff_dict_no_bg = {0:'person', 1:'bicycle', 2:'car', 3:'motorcycle', 5:'bus', 6:'train', 7:'truck',
+cocoStuff_dict = {0:'person', 1:'bicycle', 2:'car', 3:'motorcycle', 5:'bus', 6:'train', 7:'truck',
                         9:'traffic light', 10:'fire hydrant', 11:'street sign', 12:'stop sign', 13:'parking meter',
                         14:'bench', # 32: 'suitcase', 40:'skateboard', 
                         63:'potted plant', 91:'banner', 93:'branch',
@@ -19,12 +19,12 @@ cocoStuff_dict_no_bg = {0:'person', 1:'bicycle', 2:'car', 3:'motorcycle', 5:'bus
 
 # This dictionary maps edge_mapping and cityscapes classes to COCO-Stuff classes.
 # Not in use, but kept for reference.
-cos2cocoStuff_dict_no_bg = {0:148, 1:139, 2:95, 3:172, 4:112, 5:131, 6:9, 7:12, 8:128, 9:123, # Having metal as 5 (pole) is not ideal, but it is the only way to keep the mapping consistent.
+cos2cocoStuff_dict = {0:148, 1:139, 2:95, 3:172, 4:112, 5:131, 6:9, 7:12, 8:128, 9:123, # Having metal as 5 (pole) is not ideal, but it is the only way to keep the mapping consistent.
                             10:255, 11:0, 12:0, 13:2, 14:7, 15:5, 16:6, 17:1, 18:1, 19:255}
 
 # The following dictionary is to map the relevant cocostuff classes to a continuous set of labels.
 ## This specific dictionary takes all the 53 relevant classes from COCO-Stuff and maps them one-by-one to a continuous set of labels.
-cocoStuff_continuous_53_dict_no_bg = {
+cocoStuff_continuous_53_dict = {
     0:0, 1:1, 2:2, 3:3, 5:4, 6:5, 7:6,
     9:7, 10:8, 11:9, 12:10, 13:11,
     14:12, 32:13, 40:14,
@@ -49,7 +49,7 @@ cocoStuff_continuous_53_dict_no_bg = {
 ### terrain (18): 110, 123, 124, 125 (cancelled), 133, 135, 153, 158
 ### building (15): 95, 127
 ### wall (32): 170, 171, 172, 173, 174, 175, 176
-cocoStuff_continuous_35_dict_no_bg = {
+cocoStuff_continuous_35_dict = {
     0:0, 1:1, 2:2, 3:3, 5:4, 6:5, 7:6,
     9:7, 10:8,
     11:9, 12:9, # traffic sign
@@ -67,7 +67,7 @@ cocoStuff_continuous_35_dict_no_bg = {
 
 # The following dictionary is to map a very small relevant subset of cocostuff classes to a continuous set of labels.
 ## Classes: road, sidewalk, building, pole, traffic light, traffic sign, vegetation, terrain, background
-cocoStuff_continuous_7_dict_no_bg = {
+cocoStuff_continuous_7_dict = {
     148:0, 139:1,
     95:2, 127:2, # building
     131:3, 9:4,
@@ -77,10 +77,10 @@ cocoStuff_continuous_7_dict_no_bg = {
     255:8  # Background is mapped to 255, which is not used in the continuous labels.
 }
 # Weight mapping for the continuous set of labels
-cocoStuff_continuous_7_weights_no_bg = [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 0.1]  # Background has less weight
+cocoStuff_continuous_7_weights = [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 0.1]  # Background has less weight
 
-# Map for cityscapes
-cocoStuff_cityscapes_dict_no_bg = {
+# Map for cityscapes. Will later add remaining classes. 
+cocoStuff_cityscapes_dict = {
     148: 0, 139: 1,
     95: 2, 127: 2,
     131: 5,

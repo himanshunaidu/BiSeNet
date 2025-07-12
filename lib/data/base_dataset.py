@@ -10,14 +10,18 @@ from torch.utils.data import Dataset, DataLoader
 import torch.distributed as dist
 import cv2
 import numpy as np
+from typing import TypedDict
 
-
-
+class BaseDatasetKwargs(TypedDict, total=False):
+    n_cats: int
+    lb_ignore: int
+    custom_mapping_key: str
 
 class BaseDataset(Dataset):
     '''
     '''
-    def __init__(self, dataroot, annpath, trans_func=None, mode='train'):
+    def __init__(self, dataroot, annpath, trans_func=None, mode='train', *,
+                 n_cats=8, lb_ignore=255, custom_mapping_key=None):
         super(BaseDataset, self).__init__()
         assert mode in ('train', 'val', 'test')
         self.mode = mode
