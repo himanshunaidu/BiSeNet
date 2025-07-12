@@ -23,7 +23,7 @@ class BaseDataset(Dataset):
     '''
     '''
     def __init__(self, dataroot, annpath, trans_func=None, mode='train', *,
-                 n_cats=8, lb_ignore=255, custom_mapping_key=None):
+                 n_cats=8, lb_ignore=255, custom_mapping_key=None, custom_mapping_weights=None, custom_mapping_dict=None):
         super(BaseDataset, self).__init__()
         assert mode in ('train', 'val', 'test')
         self.mode = mode

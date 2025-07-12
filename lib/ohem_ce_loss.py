@@ -42,12 +42,13 @@ class OhemCELoss(nn.Module):
 
 class OhemCEWeightedLoss(nn.Module):
 
-    def __init__(self, thresh, weights, lb_ignore=255):
+    def __init__(self, thresh, weights: list, lb_ignore=255):
         super(OhemCEWeightedLoss, self).__init__()
         self.thresh = -torch.log(torch.tensor(thresh, requires_grad=False, dtype=torch.float)).cuda()
         self.lb_ignore = lb_ignore
-        self.criteria = nn.CrossEntropyLoss(weight=weights, ignore_index=lb_ignore, reduction='none')
-    
+        self.weights = torch.tensor(weights, dtype=torch.float).cuda()
+        self.criteria = nn.CrossEntropyLoss(weight=self.weights, ignore_index=lb_ignore, reduction='none')
+
     def forward(self, logits, labels):
         n_min = labels[labels != self.lb_ignore].numel() // 16
         loss = self.criteria(logits, labels).view(-1)
