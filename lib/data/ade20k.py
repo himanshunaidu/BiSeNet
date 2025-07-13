@@ -12,7 +12,7 @@ import cv2
 import numpy as np
 
 import lib.data.transform_cv2 as T
-from lib.data.base_dataset import BaseDataset
+from lib.data.base_dataset import BaseDataset, BaseDatasetKwargs
 
 '''
 proportion of each class label pixels:
@@ -25,9 +25,9 @@ proportion of each class label pixels:
 
 class ADE20k(BaseDataset):
 
-    def __init__(self, dataroot, annpath, trans_func=None, mode='train'):
+    def __init__(self, dataroot, annpath, trans_func=None, mode='train', **kwargs: BaseDatasetKwargs):
         super(ADE20k, self).__init__(
-                dataroot, annpath, trans_func, mode)
+                dataroot, annpath, trans_func, mode, **kwargs)
         self.n_cats = 150
         self.lb_ignore = 255
         self.lb_map = np.arange(200) - 1 # label range from 1 to 149, 0 is ignored

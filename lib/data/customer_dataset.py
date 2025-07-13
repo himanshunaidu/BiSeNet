@@ -3,14 +3,14 @@
 
 
 import lib.data.transform_cv2 as T
-from lib.data.base_dataset import BaseDataset
+from lib.data.base_dataset import BaseDataset, BaseDatasetKwargs
 
 
 class CustomerDataset(BaseDataset):
 
-    def __init__(self, dataroot, annpath, trans_func=None, mode='train'):
+    def __init__(self, dataroot, annpath, trans_func=None, mode='train', **kwargs: BaseDatasetKwargs):
         super(CustomerDataset, self).__init__(
-                dataroot, annpath, trans_func, mode)
+                dataroot, annpath, trans_func, mode, **kwargs)
         self.lb_ignore = 255
 
         self.to_tensor = T.ToTensor(

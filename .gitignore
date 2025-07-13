@@ -112,6 +112,7 @@ tensorrt/build/*
 lib/data/log
 datasets/annotations/*
 datasets/coco/*
+datasets/coco_subset/*
 datasets/coco/train.txt
 datasets/coco/val.txt
 datasets/ade20k/train.txt
@@ -120,6 +121,8 @@ datasets/cityscapes/*
 datasets/cityscapes_backup
 datasets/custom_edge_mapping
 datasets/ios_point_mapper
+datasets/custom_images
+datasets/mapillary_vistas
 pretrained/*
 run.sh
 openvino/build/*

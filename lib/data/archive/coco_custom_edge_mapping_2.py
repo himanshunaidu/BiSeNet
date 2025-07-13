@@ -15,7 +15,7 @@ if __name__ == '__main__':
     import sys
     sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 import lib.data.transform_cv2 as T
-from lib.data.base_dataset import BaseDataset
+from lib.data.base_dataset import BaseDataset, BaseDatasetKwargs
 
 '''
 The following dataset is used for COCO-Stuff dataset with an accessibility mapping.
@@ -63,38 +63,40 @@ cocoStuff_continuous_dict = {0:0, 1:1, 2:2, 3:3, 4:4, 6:5, 7:6, 8:7,
                   96:16, 128:16, # building
                   99:17, 100:18, 
                   111:19, 124:19, 125:19, 126:0, 134:19, 136:19, 154:19, 159:19, # terrain
-                  113:20, 132: 21, 140:22, 144:23,
+                  113:20, 132:21, 140:22, 144:23,
                   145:24, 146:25, 147:26, 149:27, 150:28, 151:29,
                   161:30, 162:31, 164:32, 
                   171:33, 172:33, 173:33, 174:33, 175:33, 176:33, 177:33, # wall
                   182:34 }
 
-# The following dict maps the continuous labels to the class names
-cocoStuff_continuous_dict_inv = {}
-for k, v in cocoStuff_continuous_dict.items():
-    if v not in cocoStuff_continuous_dict_inv:
-        cocoStuff_continuous_dict_inv[v] = []
-    cocoStuff_continuous_dict_inv[v].append(cocoStuff_dict[k])
-print("CocoStuff continuous dict inverse:", cocoStuff_continuous_dict_inv)
+# The following dict is to map the custom classes to the continuous set of cocoStuff classes (cocoStuff_continuous_dict)
+# not the original cocostuff classes.
+# custom_to_cocoStuff_dict = {0:27, 1:22, 2:16, 3:33, 4:20, 5:21, 6:8, 7:10, 8:15, 9:19,
+#                             10:0, 11:1, 12:1, 13:3, 14:7, 15:5, 16:6, 17:4, 18:2, 19:0}
+# Final classes: road, pavement, building, traffic light, traffic sign, pole, vegetation, terrain
+custom_to_cocoStuff_dict = {0:0, 1:1, 2:2, 5:3, 6:4, 7:5, 8:6, 9:7}
 
-# CocoStuff continuous dict inverse: {0: ['background', 'ground-other'], 1: ['person'], 2: ['bicycle'], 3: ['car'], 4: ['motorcycle'], 5: ['bus'], 6: ['train'], 7: ['truck'], 8: ['traffic light'], 9: ['fire hydrant'], 10: ['street sign', 'stop sign'], 11: ['parking meter'], 12: ['bench'], 13: ['potted plant'], 14: ['banner'], 15: ['branch', 'bush', 'leaves', 'plant-other', 'tree'], 16: ['building-other', 'house'], 17: ['cage'], 18: ['cardboard'], 19: ['dirt', 'grass', 'gravel', 'moss', 'mud', 'sand', 'snow'], 20: ['fence'], 21: ['metal'], 22: ['pavement'], 23: ['platform'], 24: ['playfield'], 25: ['railing'], 26: ['railroad'], 27: ['road'], 28: ['rock'], 29: ['roof'], 30: ['stairs'], 31: ['stone'], 32: ['structural-other'], 33: ['wall-brick', 'wall-concrete', 'wall-other', 'wall-panel', 'wall-stone', 'wall-tile', 'wall-wood'], 34: ['wood']}
+custom_id_to_class = {0: 'road', 1: 'sidewalk', 2: 'building', 3: 'wall', 4: 'fence', 5: 'pole', 6: 'traffic light',
+                7: 'traffic sign', 8: 'vegetation', 9: 'terrain', 10: 'sky', 11: 'person', 12: 'rider', 13: 'car',
+                14: 'truck', 15: 'bus', 16: 'train', 17: 'motorcycle', 18: 'bicycle', 19: 'undefined', 
+                # 20:'road marking', 
+                # 21:'footpath', 22:'pedestrian traffic light',23:'curb',24:'lowered curb',25:'covered bus station',
+                # 26:'bench',27:'wheeled pedestrian'
+                }
 
-exit(-1)
+class CocoStuffAccessibilityCustomEdgeMapping2(BaseDataset):
 
-
-class CocoStuffAccessibility2(BaseDataset):
-
-    def __init__(self, dataroot, annpath, trans_func=None, mode='train'):
-        super(CocoStuffAccessibility2, self).__init__(
-                dataroot, annpath, trans_func, mode)
-        self.n_cats = 35 # equal to length of cocoStuff_continuous_dict
+    def __init__(self, dataroot, annpath, trans_func=None, mode='train', **kwargs: BaseDatasetKwargs):
+        super(CocoStuffAccessibilityCustomEdgeMapping2, self).__init__(
+                dataroot, annpath, trans_func, mode, **kwargs)
+        self.n_cats = 8 # actually 35: equal to length of cocoStuff_continuous_dict
         self.lb_ignore = 255
 
         ## label mapping, map cocoStuff to cocoStuff with accessibility (use cocoStuff_continuous_dict)
         self.lb_map = np.arange(256)
         for ind in range(256):
-            if ind in cocoStuff_continuous_dict.keys():
-                self.lb_map[ind] = cocoStuff_continuous_dict[ind]
+            if ind in custom_to_cocoStuff_dict.keys():
+                self.lb_map[ind] = custom_to_cocoStuff_dict[ind]
             else:
                 self.lb_map[ind] = self.lb_ignore
 
@@ -105,9 +107,9 @@ class CocoStuffAccessibility2(BaseDataset):
     
 
 if __name__ == "__main__":
-    dataroot = '../../datasets/coco'
-    annpath = '../../datasets/coco/train.txt'
-    dataset = CocoStuffAccessibility2(dataroot, annpath)
+    dataroot = '../../datasets/custom_edge_mapping'
+    annpath = '../../datasets/custom_edge_mapping/train.txt'
+    dataset = CocoStuffAccessibilityCustomEdgeMapping2(dataroot, annpath)
 
     for i in range(10):
         img, label = dataset[i]

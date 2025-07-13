@@ -6,12 +6,13 @@ import torch.distributed as dist
 import lib.data.transform_cv2 as T
 from lib.data.sampler import RepeatedDistSampler
 
+from lib.data.base_dataset import BaseDataset, BaseDatasetKwargs
 from lib.data.cityscapes_cv2 import CityScapes
 from lib.data.coco import CocoStuff
 from lib.data.coco_accessibility import CocoStuffAccessibility
-from lib.data.coco_accessibility_2 import CocoStuffAccessibility2
+# from lib.data.coco_accessibility_2 import CocoStuffAccessibility2
 from lib.data.coco_custom_edge_mapping import CocoStuffAccessibilityCustomEdgeMapping
-from lib.data.coco_custom_edge_mapping_2 import CocoStuffAccessibilityCustomEdgeMapping2
+# from lib.data.coco_custom_edge_mapping_2 import CocoStuffAccessibilityCustomEdgeMapping2
 from lib.data.custom_ios_point_mapper import CustomIOSPointMapper
 from lib.data.ade20k import ADE20k
 from lib.data.customer_dataset import CustomerDataset
@@ -34,7 +35,13 @@ def get_data_loader(cfg, mode='train'):
         shuffle = False
         drop_last = False
 
-    ds = eval(cfg.dataset)(cfg.im_root, annpath, trans_func=trans_func, mode=mode)
+    kwargs: BaseDatasetKwargs = {}
+    if hasattr(cfg, 'n_cats'): kwargs['n_cats'] = cfg.n_cats
+    if hasattr(cfg, 'lb_ignore'): kwargs['lb_ignore'] = cfg.lb_ignore
+    if hasattr(cfg, 'custom_mapping_key'): kwargs['custom_mapping_key'] = cfg.custom_mapping_key
+    if hasattr(cfg, 'custom_mapping_weights'): kwargs['custom_mapping_weights'] = cfg.custom_mapping_weights
+    if hasattr(cfg, 'custom_mapping_dict'): kwargs['custom_mapping_dict'] = cfg.custom_mapping_dict
+    ds = eval(cfg.dataset)(cfg.im_root, annpath, trans_func=trans_func, mode=mode, **kwargs)
 
     if dist.is_initialized():
         assert dist.is_available(), "dist should be initialzed"
