@@ -20,6 +20,10 @@ ios_point_mapper_to_cocoStuff_custom_11_dict = {0:10, 1:9, 2:255, 3:255, 4:2, 5:
                                                 10:8, 11:9, 12:8, 13:9, 14:3, 15:8, 16:9, 17:0, 18:1,
                                                 19:8, 20:8, 21:7, 22:4, 23:5, 24:9, 25:9, 26:255, 27:6, 28:8}
 
+ios_point_mapper_to_cocoStuff_custom_9_dict = {0:8, 1:7, 2:255, 3:255, 4:2, 5:7, 6:7, 7:7, 8:6, 9:6,
+                                                10:6, 11:7, 12:6, 13:7, 14:3, 15:6, 16:7, 17:0, 18:1,
+                                                19:6, 20:6, 21:6, 22:4, 23:5, 24:7, 25:7, 26:255, 27:6, 28:6}
+
 ## Archived Code
 # ios_point_mapper_to_cocoStuff_custom_35_dict_id_name = {}
 # for key, value in ios_point_mapper_to_cocoStuff_custom_35_dict.items():

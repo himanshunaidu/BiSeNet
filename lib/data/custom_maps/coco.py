@@ -83,7 +83,25 @@ cocoStuff_continuous_11_dict = {
     255:10  # Background is mapped to 255, which is not used in the continuous labels.
 }
 # Weight mapping for the continuous set of labels
-cocoStuff_continuous_11_weights = [1.5, 3.0, 1.5, 2.5, 2.0, 2.0, 0.5, 0.5, 0.3, 0.3, 0.2] # Arbitrary weights for the classes in cocoStuff_continuous_main_dict
+cocoStuff_continuous_11_weights = [1.5, 3.0, 1.5, 2.5, 2.0, 2.0, 0.5, 0.5, 0.3, 0.3, 0.2] # Arbitrary weights for the classes in cocoStuff_continuous_11_dict
+
+# The following dictionary is to map a very small relevant subset of cocostuff classes to a continuous set of labels.
+## Main classes: road, sidewalk, building, pole, traffic light, traffic sign
+## Extra static classes (high proportion): vegetation, terrain, sky, clouds, playingfield, fence, wall-concrete
+## Extra dynamic classes (high proportion): person, bus, train, car, truck, motorcycle
+cocoStuff_continuous_9_dict = {
+    148:0, 139:1, # road, sidewalk
+    95:2, 127:2, # building
+    131:3, 9:4, # pole, traffic light
+    11:5, 12:5, # traffic sign
+    93:6, 96:6, 128:6, 141:6, 168:6, # vegetation (static)
+    110:6, 123:6, 124:6, 125:6, 133:6, 135:6, 153:6, 158:6, # terrain (static)
+    172:6, 173:6, 174:6, 175:6, 176:6, 177:6, 181:6, 156:6, 105:6, 144:6, 112:6, # static classes
+    0:7, 1:7, 2:7, 3:7, 5:7, 6:7, 7:7, # dynamic classes
+    255:8  # Background is mapped to 255, which is not used in the continuous labels.
+}
+# Weight mapping for the continuous set of labels
+cocoStuff_continuous_9_weights = [1.5, 3.0, 1.5, 2.5, 2.0, 2.0, 0.1, 0.1, 0.2] # Arbitrary weights for the classes in cocoStuff_continuous_9_dict
 
 # Map for cityscapes. Will later add remaining classes. 
 cocoStuff_cityscapes_dict = {

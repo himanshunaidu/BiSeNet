@@ -17,7 +17,8 @@ if __name__ == '__main__':
 import lib.data.transform_cv2 as T
 from lib.data.base_dataset import BaseDataset, BaseDatasetKwargs
 from lib.data.custom_maps.edge_mapping import edge_mapping_dict, edge_mapping_to_cocoStuff_custom_53_dict, \
-    edge_mapping_to_cocoStuff_custom_35_dict, edge_mapping_to_cocoStuff_custom_11_dict
+    edge_mapping_to_cocoStuff_custom_35_dict, edge_mapping_to_cocoStuff_custom_11_dict, \
+    edge_mapping_to_cocoStuff_custom_9_dict
 
 '''
 The following dataset is used for COCO-Stuff dataset with an accessibility mapping.
@@ -26,7 +27,8 @@ The following dataset is used for COCO-Stuff dataset with an accessibility mappi
 custom_mapping_dicts = {
     '53': edge_mapping_to_cocoStuff_custom_53_dict,
     '35': edge_mapping_to_cocoStuff_custom_35_dict,
-    '11': edge_mapping_to_cocoStuff_custom_11_dict
+    '11': edge_mapping_to_cocoStuff_custom_11_dict,
+    '9': edge_mapping_to_cocoStuff_custom_9_dict
 }
 
 # custom_to_cocoStuff_dict = {0:41, 1:35, 2:19, 3:50, 4:24, 5:0, 6:8, 7:11, 8:31, 9:27,

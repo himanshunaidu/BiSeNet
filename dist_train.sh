@@ -83,4 +83,27 @@ torchrun --nproc_per_node=$NGPUS tools/train_amp2.py --config $cfg_file --finetu
 export CUDA_VISIBLE_DEVICES=0
 cfg_file=configs/bisenetv2_coco_ios_point_mapper.py
 NGPUS=1
-torchrun --nproc_per_node=$NGPUS tools/train_amp2.py --config $cfg_file --finetune-from ./res/bisenetv2_coco_ios_point_mapper/model_final_coco_custom_edge_mapping.pth
+torchrun --nproc_per_node=$NGPUS tools/train_amp2.py --config $cfg_file --finetune-from ./res/bisenetv2_coco_ios_point_mapper/model_final_coco_accessibility_stage_2.pth
+
+
+
+
+
+
+# COCO_stuff 2 stages and iOSPointMapper
+export CUDA_VISIBLE_DEVICES=0
+cfg_file=configs/bisenetv2_coco_accessibility_stage_1.py
+NGPUS=1
+torchrun --nproc_per_node=$NGPUS tools/train_amp2.py --config $cfg_file &&
+cp ./res/bisenetv2_coco_accessibility_stage_1/model_final.pth ./res/bisenetv2_coco_accessibility_stage_2/ &&
+mv ./res/bisenetv2_coco_accessibility_stage_2/model_final.pth ./res/bisenetv2_coco_accessibility_stage_2/model_final_coco_accessibility_stage_1.pth &&
+export CUDA_VISIBLE_DEVICES=0
+cfg_file=configs/bisenetv2_coco_accessibility_stage_2.py
+NGPUS=1
+torchrun --nproc_per_node=$NGPUS tools/train_amp2.py --config $cfg_file --finetune-from ./res/bisenetv2_coco_accessibility_stage_2/model_final_coco_accessibility_stage_1.pth &&
+cp ./res/bisenetv2_coco_accessibility_stage_2/model_final.pth ./res/bisenetv2_coco_ios_point_mapper/ &&
+mv ./res/bisenetv2_coco_ios_point_mapper/model_final.pth ./res/bisenetv2_coco_ios_point_mapper/model_final_coco_accessibility_stage_2.pth &&
+export CUDA_VISIBLE_DEVICES=0
+cfg_file=configs/bisenetv2_coco_ios_point_mapper.py
+NGPUS=1
+torchrun --nproc_per_node=$NGPUS tools/train_amp2.py --config $cfg_file --finetune-from ./res/bisenetv2_coco_ios_point_mapper/model_final_coco_accessibility_stage_2.pth

@@ -17,7 +17,7 @@ if __name__ == '__main__':
 import lib.data.transform_cv2 as T
 from lib.data.base_dataset import BaseDataset, BaseDatasetKwargs
 from lib.data.custom_maps.coco import cocoStuff_dict, cocoStuff_continuous_53_dict, cocoStuff_continuous_35_dict, \
-    cocoStuff_continuous_11_dict, cocoStuff_cityscapes_dict
+    cocoStuff_continuous_11_dict, cocoStuff_continuous_9_dict, cocoStuff_cityscapes_dict
 
 '''
 The following dataset is used for COCO-Stuff dataset with an accessibility mapping.
@@ -27,7 +27,8 @@ custom_mapping_dicts = {
     'city': cocoStuff_cityscapes_dict,
     '53': cocoStuff_continuous_53_dict,
     '35': cocoStuff_continuous_35_dict,
-    '11': cocoStuff_continuous_11_dict
+    '11': cocoStuff_continuous_11_dict,
+    '9': cocoStuff_continuous_9_dict
 }
 
 class CocoStuffAccessibility(BaseDataset):
