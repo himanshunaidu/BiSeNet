@@ -119,7 +119,7 @@ datasets/coco/train.txt
 datasets/coco/val.txt
 datasets/ade20k/train.txt
 datasets/ade20k/val.txt
-datasets/oasis_ios/*
+datasets/edge_mapping_ios/*
 datasets/cityscapes/*
 datasets/cityscapes_backup
 datasets/custom_edge_mapping

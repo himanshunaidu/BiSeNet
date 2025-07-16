@@ -16,24 +16,24 @@ if __name__ == '__main__':
     sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 import lib.data.transform_cv2 as T
 from lib.data.base_dataset import BaseDataset, BaseDatasetKwargs
-from lib.data.custom_maps.ios_point_mapper import ios_point_mapper_dict, \
-    ios_point_mapper_to_cocoStuff_custom_35_dict, ios_point_mapper_to_cocoStuff_custom_11_dict, \
-    ios_point_mapper_to_cocoStuff_custom_9_dict
+from lib.data.custom_maps.edge_mapping_ios import edge_mapping_ios_dict, \
+    edge_mapping_ios_to_cocoStuff_custom_35_dict, edge_mapping_ios_to_cocoStuff_custom_11_dict, \
+        edge_mapping_ios_to_cocoStuff_custom_9_dict
 
 '''
 The following dataset is used for the custom annotated iOSPointMapper dataset with an accessibility mapping.
 '''
 # Custom mapping dictionary for iOSPointMapper
 custom_mapping_dicts = {
-    '35': ios_point_mapper_to_cocoStuff_custom_35_dict,
-    '11': ios_point_mapper_to_cocoStuff_custom_11_dict,
-    '9': ios_point_mapper_to_cocoStuff_custom_9_dict
+    '35': edge_mapping_ios_to_cocoStuff_custom_35_dict,
+    '11': edge_mapping_ios_to_cocoStuff_custom_11_dict,
+    '9': edge_mapping_ios_to_cocoStuff_custom_9_dict
 }
 
-class CustomIOSPointMapper(BaseDataset):
+class CustomEdgeMappingIOS(BaseDataset):
 
     def __init__(self, dataroot, annpath, trans_func=None, mode='train', **kwargs: BaseDatasetKwargs):
-        super(CustomIOSPointMapper, self).__init__(
+        super(CustomEdgeMappingIOS, self).__init__(
                 dataroot, annpath, trans_func, mode, **kwargs)
         self.n_cats = kwargs.get('n_cats', 11)
         self.lb_ignore = kwargs.get('lb_ignore', 255)
@@ -68,9 +68,9 @@ class CustomIOSPointMapper(BaseDataset):
         return custom_mapping_dicts[custom_mapping_key]
 
 if __name__ == "__main__":
-    dataroot = '../../datasets/ios_point_mapper'
-    annpath = '../../datasets/ios_point_mapper/dataset.txt'
-    dataset = CustomIOSPointMapper(dataroot, annpath)
+    dataroot = '../../datasets/edge_mapping_ios'
+    annpath = '../../datasets/edge_mapping_ios/dataset.txt'
+    dataset = CustomEdgeMappingIOS(dataroot, annpath)
     print(f"Number of categories: {dataset.n_cats}")
     print(f"Label mapping: {dataset.lb_map}")
     print(f"To tensor transform: {dataset.to_tensor}")
