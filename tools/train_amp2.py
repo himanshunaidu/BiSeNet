@@ -21,6 +21,7 @@ import torch.nn as nn
 import torch.distributed as dist
 from torch.utils.data import DataLoader
 import torch.cuda.amp as amp
+from torchinfo import summary
 
 from lib.models import model_factory
 from configs import set_cfg_from_file
@@ -32,6 +33,9 @@ from lib.meters import TimeMeter, AvgMeter
 from lib.logger import setup_logger, log_msg
 
 from tqdm import tqdm
+
+# For fine-tuning
+from lib.models.bisenetv2 import FreezeType
 
 
 ## fix all random seeds
@@ -49,11 +53,13 @@ def parse_args():
     parse.add_argument('--config', dest='config', type=str,
             default='configs/bisenetv2.py',)
     parse.add_argument('--finetune-from', type=str, default=None,)
+    parse.add_argument('--freeze-type', type=str, default="NONE", 
+            choices=[e.value for e in FreezeType],
+            help='freeze type for fine-tuning: all, detail, segment, head, none')
     return parse.parse_args()
 
 args = parse_args()
 cfg = set_cfg_from_file(args.config)
-
 
 def set_model(lb_ignore=255):
     logger = logging.getLogger()
@@ -64,6 +70,8 @@ def set_model(lb_ignore=255):
             map_location='cpu'), strict=False)
         logger.info('\tmissing keys: ' + json.dumps(msg.missing_keys))
         logger.info('\tunexpected keys: ' + json.dumps(msg.unexpected_keys))
+    if args.freeze_type != 'NONE':
+        net.fine_tune_freeze(FreezeType[args.freeze_type])
     if cfg.use_sync_bn: net = nn.SyncBatchNorm.convert_sync_batchnorm(net)
     net.cuda()
     net.train()

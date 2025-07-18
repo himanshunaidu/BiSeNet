@@ -3,6 +3,7 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 import torch.utils.model_zoo as modelzoo
+from enum import Enum
 
 backbone_url = 'https://github.com/CoinCheung/BiSeNet/releases/download/0.0.0/backbone_v2.pth'
 
@@ -319,6 +320,13 @@ class CustomArgMax(torch.autograd.Function):
     def symbolic(g, feat_out, dim: int):
         return g.op('CustomArgMax', feat_out, dim_i=dim)
 
+class FreezeType(Enum):
+    NONE = "NONE"
+    ALL = "ALL"
+    DETAIL = "DETAIL"
+    SEGMENT = "SEGMENT"
+    HEAD = "HEAD"
+    DETAIL_AND_SEGMENT = "DETAIL_AND_SEGMENT" # All of detail, and first few layers of segment
 
 class BiSeNetV2(nn.Module):
 
@@ -398,8 +406,38 @@ class BiSeNetV2(nn.Module):
             else:
                 add_param_to_list(child, wd_params, nowd_params)
         return wd_params, nowd_params, lr_mul_wd_params, lr_mul_nowd_params
-
-
+    
+    def _freeze_auxiliary(self, aux: str):
+        if hasattr(self, aux):
+            for param in getattr(self, aux).parameters():
+                param.requires_grad = False
+    
+    def fine_tune_freeze(self, freeze_type: FreezeType):
+        if freeze_type == FreezeType.NONE: return
+        if freeze_type == FreezeType.ALL:
+            for param in self.parameters():
+                param.requires_grad = False
+        elif freeze_type == FreezeType.DETAIL:
+            for param in self.detail.parameters():
+                param.requires_grad = False
+        elif freeze_type == FreezeType.SEGMENT:
+            for param in self.segment.parameters():
+                param.requires_grad = False
+        elif freeze_type == FreezeType.HEAD:
+            for param in self.head.parameters():
+                param.requires_grad = False
+            # Freeze auxiliary heads if they exist
+            self._freeze_auxiliary('aux2')
+            self._freeze_auxiliary('aux3')
+            self._freeze_auxiliary('aux4')
+            self._freeze_auxiliary('aux5_4')
+        elif freeze_type == FreezeType.DETAIL_AND_SEGMENT:
+            for param in self.detail.parameters():
+                param.requires_grad = False
+            for param in self.segment.S1S2.parameters():
+                param.requires_grad = False
+        else:
+            raise NotImplementedError(f"Freeze type {freeze_type} not implemented.")
 
 if __name__ == "__main__":
     #  x = torch.randn(16, 3, 1024, 2048)

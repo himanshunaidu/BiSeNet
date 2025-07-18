@@ -113,3 +113,10 @@ export CUDA_VISIBLE_DEVICES=0
 cfg_file=configs/bisenetv2_coco_ios_point_mapper_combined.py
 NGPUS=1
 torchrun --nproc_per_node=$NGPUS tools/train_amp2.py --config $cfg_file --finetune-from ./res/bisenetv2_coco_ios_point_mapper/model_final_coco_accessibility_stage_2.pth
+
+export CUDA_VISIBLE_DEVICES=0
+cfg_file=configs/bisenetv2_coco_ios_point_mapper_combined_finetuned.py
+NGPUS=1
+torchrun --nproc_per_node=$NGPUS tools/train_amp2.py --config $cfg_file \
+    --finetune-from ./res/bisenetv2_coco_ios_point_mapper_finetuned/model_final_coco_accessibility_stage_2.pth \
+    --freeze-type DETAIL_AND_SEGMENT
