@@ -124,6 +124,7 @@ datasets/cityscapes/*
 datasets/cityscapes_backup
 datasets/custom_edge_mapping
 datasets/ios_point_mapper
+datasets/ios_point_mapper_combined
 datasets/custom_images
 datasets/mapillary_vistas
 pretrained/*
