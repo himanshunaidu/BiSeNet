@@ -17,7 +17,8 @@ if __name__ == '__main__':
 import lib.data.transform_cv2 as T
 from lib.data.base_dataset import BaseDataset, BaseDatasetKwargs
 from lib.data.custom_maps.ios_point_mapper import ios_point_mapper_dict, \
-    ios_point_mapper_to_cocoStuff_custom_35_dict, ios_point_mapper_to_cocoStuff_custom_11_dict
+    ios_point_mapper_to_cocoStuff_custom_35_dict, ios_point_mapper_to_cocoStuff_custom_11_dict, \
+    ios_point_mapper_to_cocoStuff_custom_9_dict
 
 '''
 The following dataset is used for the custom annotated iOSPointMapper dataset with an accessibility mapping.
@@ -25,7 +26,8 @@ The following dataset is used for the custom annotated iOSPointMapper dataset wi
 # Custom mapping dictionary for iOSPointMapper
 custom_mapping_dicts = {
     '35': ios_point_mapper_to_cocoStuff_custom_35_dict,
-    '11': ios_point_mapper_to_cocoStuff_custom_11_dict
+    '11': ios_point_mapper_to_cocoStuff_custom_11_dict,
+    '9': ios_point_mapper_to_cocoStuff_custom_9_dict
 }
 
 class CustomIOSPointMapper(BaseDataset):
@@ -66,8 +68,8 @@ class CustomIOSPointMapper(BaseDataset):
         return custom_mapping_dicts[custom_mapping_key]
 
 if __name__ == "__main__":
-    dataroot = '../../datasets/ios_point_mapper/iOSPointMapper_1_Cityscapes'
-    annpath = '../../datasets/ios_point_mapper/iOSPointMapper_1_Cityscapes/dataset.txt'
+    dataroot = '../../datasets/ios_point_mapper'
+    annpath = '../../datasets/ios_point_mapper/dataset.txt'
     dataset = CustomIOSPointMapper(dataroot, annpath)
     print(f"Number of categories: {dataset.n_cats}")
     print(f"Label mapping: {dataset.lb_map}")

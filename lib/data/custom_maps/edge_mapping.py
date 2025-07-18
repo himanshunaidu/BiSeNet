@@ -23,6 +23,11 @@ edge_mapping_to_cocoStuff_custom_35_dict = {0:26, 1:21, 2:15, 3:32, 4:19, 5:20, 
 edge_mapping_to_cocoStuff_custom_11_dict = {0:0, 1:1, 2:2, 3:8, 4:8, 5:3, 6:4, 7:5, 8:6, 9:7, 
                                             10:8, 11:9, 12:9, 13:9, 14:9, 15:9, 16:9, 17:9, 18:9, 19:255}
 
+# Mapping from edge mapping classes to **custom** cocostuff classes (9 classes)
+edge_mapping_to_cocoStuff_custom_9_dict = {0:0, 1:1, 2:2, 3:6, 4:6, 5:3, 6:4, 7:5, 8:6, 9:6, 
+                                            10:6, 11:7, 12:7, 13:7, 14:7, 15:7, 16:7, 17:7, 18:7, 19:255}
+
+
 ## Archived Code
 # edge_mapping_to_cocoStuff_custom_35_dict_id_name = {}
 # for key, value in edge_mapping_to_cocoStuff_custom_35_dict.items():

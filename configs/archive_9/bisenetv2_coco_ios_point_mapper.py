@@ -2,7 +2,7 @@
 ## bisenetv2
 cfg = dict(
     model_type='bisenetv2',
-    n_cats=11,
+    n_cats=9,
     num_aux_heads=4,
     lr_start=5e-3,
     weight_decay=1e-4,
@@ -12,8 +12,8 @@ cfg = dict(
     im_root='./datasets/ios_point_mapper/iOSPointMapper_1_Cityscapes',
     train_im_anns='./datasets/ios_point_mapper/iOSPointMapper_1_Cityscapes/dataset.txt',
     val_im_anns='./datasets/ios_point_mapper/iOSPointMapper_1_Cityscapes/dataset.txt',
-    custom_mapping_key='11',
-    custom_mapping_weights=[1.5, 3.0, 1.5, 2.5, 2.0, 2.0, 0.5, 0.5, 0.3, 0.3, 0.2], # Arbitrary weights for the classes in cocoStuff_continuous_main_dict
+    custom_mapping_key='9',
+    custom_mapping_weights=[1.5, 3.0, 1.5, 2.5, 2.0, 2.0, 0.1, 0.1, 0.2], # Arbitrary weights for the classes in cocoStuff_continuous_main_dict
     scales=[0.75, 2.],
     cropsize=[640, 640],
     eval_crop=[640, 640],

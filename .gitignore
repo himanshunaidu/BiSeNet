@@ -107,6 +107,8 @@ venv.bak/
 play.py
 preprocess_data.py
 res/
+backup/
+*.zip
 adj.md
 tensorrt/build/*
 lib/data/log
@@ -117,10 +119,12 @@ datasets/coco/train.txt
 datasets/coco/val.txt
 datasets/ade20k/train.txt
 datasets/ade20k/val.txt
+datasets/edge_mapping_ios/*
 datasets/cityscapes/*
 datasets/cityscapes_backup
 datasets/custom_edge_mapping
 datasets/ios_point_mapper
+datasets/ios_point_mapper_combined
 datasets/custom_images
 datasets/mapillary_vistas
 pretrained/*
