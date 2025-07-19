@@ -34,6 +34,9 @@ from lib.logger import log_msg
 
 from tqdm import tqdm
 
+# For fine-tuning
+from lib.models.bisenetv2 import FreezeType
+
 def setup_logger(name, logpth):
     """
     Overriding the default setup_logger function to prevent logging to a file.
@@ -55,6 +58,9 @@ def parse_args():
     parse.add_argument('--config', dest='config', type=str,
             default='configs/bisenetv2_coco_accessibility_stage_1.py',)
     parse.add_argument('--finetune-from', type=str, default=None,)
+    parse.add_argument('--freeze-type', type=str, default="NONE", 
+            choices=[e.value for e in FreezeType],
+            help='freeze type for fine-tuning: all, detail, segment, head, none')
     parse.add_argument('--lr-start', type=float, default=None,
             help='learning rate for the first iteration')
     parse.add_argument('--weight-decay', type=float, default=None,
@@ -75,6 +81,8 @@ def override_cfg(cfg, args):
         cfg.finetune_from = args.finetune_from
     else:
         cfg.finetune_from = None
+    if 'freeze_type' in args and args.freeze_type is not None:
+        cfg.freeze_type = args.freeze_type
     if args.lr_start is not None:
         cfg.lr_start = args.lr_start
     if args.weight_decay is not None:
@@ -98,6 +106,9 @@ def set_model(cfg, lb_ignore=255):
             map_location='cpu'), strict=False)
         logger.info('\tmissing keys: ' + json.dumps(msg.missing_keys))
         logger.info('\tunexpected keys: ' + json.dumps(msg.unexpected_keys))
+    if args.freeze_type != 'NONE':
+        net.fine_tune_freeze(FreezeType[args.freeze_type])
+    if cfg.use_sync_bn: net = nn.SyncBatchNorm.convert_sync_batchnorm(net)
     if cfg.use_sync_bn: net = nn.SyncBatchNorm.convert_sync_batchnorm(net)
     net.cuda()
     net.train()

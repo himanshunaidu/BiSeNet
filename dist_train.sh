@@ -124,4 +124,10 @@ torchrun --nproc_per_node=$NGPUS tools/train_amp2.py --config $cfg_file \
 export CUDA_VISIBLE_DEVICES=0
 cfg_file=configs/mapillary_accessibility/bisenetv2_mapillary_accessibility_stage_1.py
 NGPUS=1
+CUDA_LAUNCH_BLOCKING=1
 torchrun --nproc_per_node=$NGPUS tools/train_amp2.py --config $cfg_file
+
+export CUDA_VISIBLE_DEVICES=0
+cfg_file=configs/mapillary_accessibility/bisenetv2_mapillary_accessibility_stage_1.py
+NGPUS=1
+python tools/train_amp2.py --config $cfg_file

@@ -16,16 +16,18 @@ from tools.train_tune import train, setup_logger
 
 def objective(trial: Trial):
     # Set hyperparameters to be optimized
-    lr_start = 5*trial.suggest_float('lr_start', 1e-3, 1e-2, log=True)
-    weight_decay = trial.suggest_float('weight_decay', 1e-4, 1e-3, log=True)
-    warmup_iters = trial.suggest_int('warmup_iters', 100, 1000, step=450)
-    max_iter = trial.suggest_int('max_iter', 1000, 2000, step=5000)
-    # warmup_iters = 1
-    # max_iter = 5
-
-    respth = './res/optuna/bisenetv2_coco_accessibility_stage_1'
+    lr_start = trial.suggest_float('lr_start', 1e-5, 1e-2, log=True)
+    weight_decay = trial.suggest_float('weight_decay', 1e-5, 1e-3, log=True)
+    freeze_type = trial.suggest_categorical('freeze_type', ['DETAIL', 'SEGMENT', 'HEAD', 'DETAIL_AND_SEGMENT'])
+    # warmup_iters = trial.suggest_int('warmup_iters', 100, 1000, step=450)
+    # max_iter = trial.suggest_int('max_iter', 1000, 2000, step=5000)
+    warmup_iters = 10
+    max_iter = 500
+    
+    respth = './res/optuna/bisenetv2_coco_ios_point_mapper_combined_finetuned'
 
     print(f"Hyperparameters: lr_start={lr_start}, weight_decay={weight_decay}, warmup_iters={warmup_iters}, max_iter={max_iter}")
+    print(f"Freeze type: {freeze_type}")
 
     # Run the train_tune script
 
@@ -37,7 +39,9 @@ def objective(trial: Trial):
     cmd = [
         'torchrun', '--nproc_per_node=1',
         'tools/train_tune.py',
-        '--config', 'configs/bisenetv2_coco_accessibility_stage_1.py',
+        '--config', 'configs/bisenetv2_coco_ios_point_mapper_combined_finetuned.py',
+        '--finetune-from', 'res/bisenetv2_coco_ios_point_mapper_finetuned/model_final_coco_accessibility_stage_2.pth',
+        '--freeze-type', freeze_type,
         '--lr-start', str(lr_start),
         '--weight-decay', str(weight_decay),
         '--warmup-iters', str(warmup_iters),
@@ -66,10 +70,12 @@ def objective(trial: Trial):
 
 if __name__ == "__main__":
     study = optuna.create_study(direction="maximize",
-                                storage="sqlite:///res/optuna/bisenetv2_coco_accessibility_stage_1.db",
-                                study_name="bisenetv2_coco_accessibility_stage_1",
+                                storage="sqlite:///res/optuna/bisenetv2_coco_ios_point_mapper_combined_finetuned.db",
+                                study_name="bisenetv2_coco_ios_point_mapper_combined_finetuned",
                                 load_if_exists=True)
     study.optimize(objective, n_trials=5)
 
     print("Best hyperparameters:")
     print(study.best_params)
+    with open('res/optuna/bisenetv2_coco_ios_point_mapper_combined_finetuned/best_params.json', 'w') as f:
+        json.dump(study.best_params, f, indent=4)

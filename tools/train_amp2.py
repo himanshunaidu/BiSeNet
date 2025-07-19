@@ -170,6 +170,7 @@ def train():
     scaler = amp.GradScaler()
 
     ## ddp training
+    # if torch.cuda.device_count() > 1:
     net = set_model_dist(net)
 
     ## meters
@@ -251,9 +252,12 @@ def train():
 
 
 def main():
+    # if torch.cuda.device_count() > 1:
     local_rank = int(os.environ['LOCAL_RANK'])
     torch.cuda.set_device(local_rank)
     dist.init_process_group(backend='nccl')
+    # else:
+    #     torch.cuda.set_device(0)
 
     if not osp.exists(cfg.respth): os.makedirs(cfg.respth)
     setup_logger(f'{cfg.model_type}-{cfg.dataset.lower()}-train', cfg.respth)
