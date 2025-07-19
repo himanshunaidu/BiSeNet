@@ -90,6 +90,13 @@ def set_optimizer(model):
     if hasattr(model, 'get_params'):
         wd_params, nowd_params, lr_mul_wd_params, lr_mul_nowd_params = model.get_params()
         #  wd_val = cfg.weight_decay
+        
+        # Filter out frozen parameters
+        wd_params = [p for p in wd_params if p.requires_grad]
+        nowd_params = [p for p in nowd_params if p.requires_grad]
+        lr_mul_wd_params = [p for p in lr_mul_wd_params if p.requires_grad]
+        lr_mul_nowd_params = [p for p in lr_mul_nowd_params if p.requires_grad]
+        
         wd_val = 0
         params_list = [
             {'params': wd_params, },
@@ -104,6 +111,11 @@ def set_optimizer(model):
                 non_wd_params.append(param)
             elif param.dim() == 2 or param.dim() == 4:
                 wd_params.append(param)
+        
+        # Filter out frozen parameters
+        wd_params = [p for p in wd_params if p.requires_grad]
+        non_wd_params = [p for p in non_wd_params if p.requires_grad]        
+        
         params_list = [
             {'params': wd_params, },
             {'params': non_wd_params, 'weight_decay': 0},

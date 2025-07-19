@@ -35,7 +35,7 @@ class MapillaryVistas(BaseDataset):
     def __init__(self, dataroot, annpath, trans_func=None, mode='train', **kwargs: BaseDatasetKwargs):
         super(MapillaryVistas, self).__init__(
                 dataroot, annpath, trans_func, mode, **kwargs)
-        self.n_cats = kwargs.get('n_cats', 53)
+        self.n_cats = kwargs.get('n_cats', 11)
         self.lb_ignore = kwargs.get('lb_ignore', 255)
         
         self.custom_mapping_dict = self._get_custom_mappings(**kwargs)
@@ -49,8 +49,9 @@ class MapillaryVistas(BaseDataset):
             else:
                 self.lb_map[ind] = self.lb_ignore
 
+        # TODO: Recalculate mean and std for Mapillary Vistas dataset
         self.to_tensor = T.ToTensor(
-            mean=(0.46962251, 0.4464104,  0.40718787), # coco, rgb
+            mean=(0.46962251, 0.4464104,  0.40718787),
             std=(0.27469736, 0.27012361, 0.28515933),
         )
         

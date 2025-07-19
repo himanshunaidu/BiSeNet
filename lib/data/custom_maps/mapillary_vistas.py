@@ -199,17 +199,21 @@ mapillary_vistas_continuous_11_dict = {
     64:6, # vegetation
     60:7, 62:7, 63:7, # terrain
     
-    61:8, # static
-    # dynamic
-    16:10, 17:10, 18:10, # ground
-    # background
+    2:8, 3:8, 5:8, 6:8, 7:8, 8:8, 9:8, 10:8, 11:8, 12:8, 68:9, 84:9, # static
+    104:9, 105:9, 106:9, 107:9, 108:9, 110:9, 114:9, # dynamic
+    109:9, 110:9, 111:9, 112:9, 113:9, 114:9, 115:9, 116:9, 30:9, 31:9, 32:9, 33:9, 34:9, # dynamic
+    67:9, 71:9, 72:9, 73:9, 75:9, 76:9, # dynamic
+    78:9, 79:9, 80:9, 81:9, 82:9, 83:9, # dynamic
+    16:10, 17:10, 18:10, 20:11, # ground
+    # 25:11, 26:11, 29:11, 61:11, # background
     
     ## lane markings will also be part of road
     35:0, 36:0, 37:0, 38:0, 39:0, 40:0, 41:0, 42:0, 43:0, 44:0, 45:0,
     46:0, 47:0, 48:0, 49:0, 50:0, 51:0, 52:0, 53:0, 54:0, 55:0, 56:0, 57:0, 58:0,
     ## other road types (e.g. bike lane, barrier separator, etc.) will also be part of road
     13:0, 10:0, 14:0, 22:0,
+    69:0, # catch basin will be part of road
     
     # curb cut will be part of sidewalk
-    15:1
+    4:1, 15:1
 }
