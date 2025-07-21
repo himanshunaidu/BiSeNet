@@ -54,23 +54,23 @@ edge_mapping_ios_to_cocoStuff_custom_9_dict = {0:8, 1:6, 2:7, 3:2, 4:7, 5:7, 6:2
                                                21:4, 22:5, 23:7, 24:7, 25:8, 26:6, 27:6, 28:7}
 
 ## Archived Code
-edge_mapping_ios_to_cocoStuff_custom_35_dict_id_name = {}
-for key, value in edge_mapping_ios_to_cocoStuff_custom_35_dict.items():
-    if key == 255: continue
-    edge_mapping_ios_to_cocoStuff_custom_35_dict_id_name[value] = edge_mapping_ios_dict[key]
-print(f"edge_mapping_ios_to_cocoStuff_custom_35_dict_id_name: {edge_mapping_ios_to_cocoStuff_custom_35_dict_id_name}")
+# edge_mapping_ios_to_cocoStuff_custom_35_dict_id_name = {}
+# for key, value in edge_mapping_ios_to_cocoStuff_custom_35_dict.items():
+#     if key == 255: continue
+#     edge_mapping_ios_to_cocoStuff_custom_35_dict_id_name[edge_mapping_ios_dict[key]] = value
+# print(f"edge_mapping_ios_to_cocoStuff_custom_35_dict_id_name: {edge_mapping_ios_to_cocoStuff_custom_35_dict_id_name}")
 
-edge_mapping_ios_to_cocoStuff_custom_11_dict_id_name = {}
-for key, value in edge_mapping_ios_to_cocoStuff_custom_11_dict.items():
-    if key == 255: continue
-    edge_mapping_ios_to_cocoStuff_custom_11_dict_id_name[value] = edge_mapping_ios_dict[key]
-print(f"edge_mapping_ios_to_cocoStuff_custom_11_dict_id_name: {edge_mapping_ios_to_cocoStuff_custom_11_dict_id_name}")
+# edge_mapping_ios_to_cocoStuff_custom_11_dict_id_name = {}
+# for key, value in edge_mapping_ios_to_cocoStuff_custom_11_dict.items():
+#     if key == 255: continue
+#     edge_mapping_ios_to_cocoStuff_custom_11_dict_id_name[edge_mapping_ios_dict[key]] = value
+# print(f"edge_mapping_ios_to_cocoStuff_custom_11_dict_id_name: {edge_mapping_ios_to_cocoStuff_custom_11_dict_id_name}")
 
-edge_mapping_ios_to_cocoStuff_custom_9_dict_id_name = {}
-for key, value in edge_mapping_ios_to_cocoStuff_custom_9_dict.items():
-    if key == 255: continue
-    edge_mapping_ios_to_cocoStuff_custom_9_dict_id_name[value] = edge_mapping_ios_dict[key]
-print(f"edge_mapping_ios_to_cocoStuff_custom_9_dict_id_name: {edge_mapping_ios_to_cocoStuff_custom_9_dict_id_name}")
+# edge_mapping_ios_to_cocoStuff_custom_9_dict_id_name = {}
+# for key, value in edge_mapping_ios_to_cocoStuff_custom_9_dict.items():
+#     if key == 255: continue
+#     edge_mapping_ios_to_cocoStuff_custom_9_dict_id_name[edge_mapping_ios_dict[key]] = value 
+# print(f"edge_mapping_ios_to_cocoStuff_custom_9_dict_id_name: {edge_mapping_ios_to_cocoStuff_custom_9_dict_id_name}")
 
 
 
