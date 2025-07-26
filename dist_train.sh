@@ -119,13 +119,27 @@ cfg_file=configs/bisenetv2_coco_ios_point_mapper_combined_finetuned.py
 NGPUS=1
 torchrun --nproc_per_node=$NGPUS tools/train_amp2.py --config $cfg_file \
     --finetune-from ./res/bisenetv2_coco_ios_point_mapper_finetuned/model_final_coco_accessibility_stage_2.pth \
-    --freeze-type DETAIL_AND_SEGMENT
+    --freeze-type DETAIL
 
 export CUDA_VISIBLE_DEVICES=0
 cfg_file=configs/mapillary_accessibility/bisenetv2_mapillary_accessibility_stage_1.py
 NGPUS=1
 CUDA_LAUNCH_BLOCKING=1
-torchrun --nproc_per_node=$NGPUS tools/train_amp2.py --config $cfg_file
+torchrun --nproc_per_node=$NGPUS tools/train_amp2.py --config $cfg_file &&
+cp ./res/bisenetv2_mapillary_accessibility_stage_1/model_final.pth ./res/bisenetv2_mapillary_accessibility_stage_2/ &&
+mv ./res/bisenetv2_mapillary_accessibility_stage_2/model_final.pth ./res/bisenetv2_mapillary_accessibility_stage_2/model_final_mapillary_accessibility_stage_1.pth &&
+export CUDA_VISIBLE_DEVICES=0
+cfg_file=configs/mapillary_accessibility/bisenetv2_mapillary_accessibility_stage_2.py
+NGPUS=1
+torchrun --nproc_per_node=$NGPUS tools/train_amp2.py --config $cfg_file \
+    --finetune-from ./res/bisenetv2_mapillary_accessibility_stage_2/model_final_mapillary_accessibility_stage_1.pth
+
+export CUDA_VISIBLE_DEVICES=0
+cfg_file=configs/mapillary_accessibility/bisenetv2_mapillary_accessibility_ios_point_mapper.py
+NGPUS=1
+torchrun --nproc_per_node=$NGPUS tools/train_amp2.py --config $cfg_file \
+    --finetune-from ./res/bisenetv2_mapillary_accessibility_ios_point_mapper/model_final_mapillary_accessibility_stage_2.pth \
+    --freeze-type DETAIL
 
 export CUDA_VISIBLE_DEVICES=0
 cfg_file=configs/mapillary_accessibility/bisenetv2_mapillary_accessibility_stage_1.py

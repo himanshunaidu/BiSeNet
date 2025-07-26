@@ -71,7 +71,7 @@ class CocoStuffAccessibility(BaseDataset):
 if __name__ == "__main__":
     dataroot = '../../datasets/coco'
     annpath = '../../datasets/coco/train.txt'
-    dataset = CocoStuffAccessibility(dataroot, annpath, custom_mapping_key='7')
+    dataset = CocoStuffAccessibility(dataroot, annpath, custom_mapping_key='9')
 
     for i in range(10):
         img, label = dataset[i]
