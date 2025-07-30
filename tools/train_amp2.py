@@ -216,7 +216,7 @@ def train():
             logger.info(msg)
 
         ## save intermediate model if the validation loss is lower
-        if (it + 1) % 500 == 0:
+        if (it + 1) % 10000 == 0:
             mious, fw_mious, cat_ious, f1_scores, macro_f1, micro_f1 = get_eval_model_results_single_scale(
                 cfg, net.module
             )

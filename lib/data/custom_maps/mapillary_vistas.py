@@ -214,6 +214,8 @@ mapillary_vistas_continuous_11_dict = {
     13:0, 10:0, 14:0, 22:0,
     69:0, # catch basin will be part of road
     
+    # curb will be part of road
+    4:0,
     # curb cut will be part of sidewalk
-    4:1, 15:1
+    15:1
 }
