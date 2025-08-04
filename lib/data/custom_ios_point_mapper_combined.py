@@ -16,29 +16,28 @@ if __name__ == '__main__':
     sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 import lib.data.transform_cv2 as T
 from lib.data.base_dataset import BaseDataset, BaseDatasetKwargs
-from lib.data.custom_maps.coco import cocoStuff_dict, cocoStuff_continuous_53_dict, cocoStuff_continuous_35_dict, \
-    cocoStuff_continuous_11_dict, cocoStuff_continuous_9_dict, cocoStuff_cityscapes_dict
+from lib.data.custom_maps.ios_point_mapper_combined import ios_point_mapper_combined_dict, \
+    ios_point_mapper_combined_to_cocoStuff_custom_35_dict, ios_point_mapper_combined_to_cocoStuff_custom_11_dict, \
+    ios_point_mapper_combined_to_cocoStuff_custom_9_dict
 
 '''
-The following dataset is used for COCO-Stuff dataset with an accessibility mapping.
+The following dataset is used for the custom annotated iOSPointMapper dataset with an accessibility mapping.
 '''
-# Custom mapping dictionary for COCOStuff
+# Custom mapping dictionary for iOSPointMapper
 custom_mapping_dicts = {
-    'city': cocoStuff_cityscapes_dict,
-    '53': cocoStuff_continuous_53_dict,
-    '35': cocoStuff_continuous_35_dict,
-    '11': cocoStuff_continuous_11_dict,
-    '9': cocoStuff_continuous_9_dict
+    '35': ios_point_mapper_combined_to_cocoStuff_custom_35_dict,
+    '11': ios_point_mapper_combined_to_cocoStuff_custom_11_dict,
+    '9': ios_point_mapper_combined_to_cocoStuff_custom_9_dict
 }
 
-class CocoStuffAccessibility(BaseDataset):
+class CustomIOSPointMapperCombined(BaseDataset):
 
-    def __init__(self, dataroot, annpath, trans_func=None, mode='train', custom_mapping='53', **kwargs: BaseDatasetKwargs):
-        super(CocoStuffAccessibility, self).__init__(
+    def __init__(self, dataroot, annpath, trans_func=None, mode='train', **kwargs: BaseDatasetKwargs):
+        super(CustomIOSPointMapperCombined, self).__init__(
                 dataroot, annpath, trans_func, mode, **kwargs)
-        self.n_cats = kwargs.get('n_cats', 53)
+        self.n_cats = kwargs.get('n_cats', 11)
         self.lb_ignore = kwargs.get('lb_ignore', 255)
-
+        
         self.custom_mapping_dict = self._get_custom_mappings(**kwargs)
         # print(f"Using custom mapping: {custom_mapping} with {len(self.custom_mapping_dict)} classes.")
 
@@ -62,23 +61,22 @@ class CocoStuffAccessibility(BaseDataset):
         if kwargs.get('custom_mapping_dict') is not None:
             return kwargs['custom_mapping_dict']
         
-        custom_mapping_key = kwargs.get('custom_mapping_key', '53')
+        custom_mapping_key = kwargs.get('custom_mapping_key', '11')
         if custom_mapping_key not in custom_mapping_dicts:
             raise ValueError(f"Invalid custom mapping key: {custom_mapping_key}. "
                              f"Available keys are: {list(custom_mapping_dicts.keys())}")
         return custom_mapping_dicts[custom_mapping_key]
 
 if __name__ == "__main__":
-    dataroot = '../../datasets/coco'
-    annpath = '../../datasets/coco/train.txt'
-    dataset = CocoStuffAccessibility(dataroot, annpath, custom_mapping_key='9')
-
-    for i in range(10):
-        img, label = dataset[i]
-        print(img.shape, label.shape)
-        print(torch.unique(label))
+    dataroot = '../../datasets/ios_point_mapper_combined'
+    annpath = '../../datasets/ios_point_mapper_combined/train.txt'
+    dataset = CustomIOSPointMapperCombined(dataroot, annpath)
+    print(f"Number of categories: {dataset.n_cats}")
+    print(f"Label mapping: {dataset.lb_map}")
+    print(f"To tensor transform: {dataset.to_tensor}")
     
-    print(dataset.lb_map)
-    # Get all non-255 label mappings
-    label_mappings = {i: int(dataset.lb_map[i]) for i in range(256) if dataset.lb_map[i] != 255}
-    print(label_mappings)
+    # Example of how to use the dataset
+    dataloader = DataLoader(dataset, batch_size=4, shuffle=True)
+    for images, labels in dataloader:
+        print(f"Batch images shape: {images.shape}, labels shape: {labels.shape}")
+        break  # Just to show one batch

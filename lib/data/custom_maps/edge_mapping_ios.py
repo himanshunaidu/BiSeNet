@@ -38,39 +38,40 @@ edge_mapping_ios_dict = {
 # covered bus stations is treated as building
 # road marking, cross-walk is treated as road
 # footpath, curb, curb ramp and tactile paving are treated as sidewalk
+## New modification: curb is now part of road
 # license plate is treated as car
 # pedestrian traffic light is treated as traffic light
 # wheeled pedestrian is treated as person
-edge_mapping_ios_to_cocoStuff_custom_35_dict = {0:255, 1:11, 2:1, 3:15, 4:4, 5:2, 6:15, 7:21, 8:19, 9:21, 10:21,
+edge_mapping_ios_to_cocoStuff_custom_35_dict = {0:255, 1:11, 2:1, 3:15, 4:4, 5:2, 6:15, 7:26, 8:19, 9:21, 10:21,
                                                 11:3, 12:7, 13:0, 14:20, 15:0, 16:26, 17:26, 18:21, 19:255,
                                                 20:18, 21:7, 22:9, 23:5, 24:6, 25:255, 26:14, 27:32, 28:0}
 
-edge_mapping_ios_to_cocoStuff_custom_11_dict = {0:10, 1:8, 2:9, 3:2, 4:9, 5:9, 6:2, 7:1, 8:8, 9:1, 10:1, 
+edge_mapping_ios_to_cocoStuff_custom_11_dict = {0:10, 1:8, 2:9, 3:2, 4:9, 5:9, 6:2, 7:0, 8:8, 9:1, 10:1, 
                                                 11:9, 12:4, 13:9, 14:3, 15:9, 16:0, 17:0, 18:1, 19:8, 20:7,
                                                 21:4, 22:5, 23:9, 24:9, 25:10, 26:6, 27:8, 28:9}
 
-edge_mapping_ios_to_cocoStuff_custom_9_dict = {0:8, 1:6, 2:7, 3:2, 4:7, 5:7, 6:2, 7:1, 8:6, 9:1, 10:1, 
+edge_mapping_ios_to_cocoStuff_custom_9_dict = {0:8, 1:6, 2:7, 3:2, 4:7, 5:7, 6:2, 7:0, 8:6, 9:1, 10:1, 
                                                11:7, 12:4, 13:7, 14:3, 15:7, 16:0, 17:0, 18:1, 19:6, 20:6,
                                                21:4, 22:5, 23:7, 24:7, 25:8, 26:6, 27:6, 28:7}
 
 ## Archived Code
-edge_mapping_ios_to_cocoStuff_custom_35_dict_id_name = {}
-for key, value in edge_mapping_ios_to_cocoStuff_custom_35_dict.items():
-    if key == 255: continue
-    edge_mapping_ios_to_cocoStuff_custom_35_dict_id_name[value] = edge_mapping_ios_dict[key]
-print(f"edge_mapping_ios_to_cocoStuff_custom_35_dict_id_name: {edge_mapping_ios_to_cocoStuff_custom_35_dict_id_name}")
+# edge_mapping_ios_to_cocoStuff_custom_35_dict_id_name = {}
+# for key, value in edge_mapping_ios_to_cocoStuff_custom_35_dict.items():
+#     if key == 255: continue
+#     edge_mapping_ios_to_cocoStuff_custom_35_dict_id_name[edge_mapping_ios_dict[key]] = value
+# print(f"edge_mapping_ios_to_cocoStuff_custom_35_dict_id_name: {edge_mapping_ios_to_cocoStuff_custom_35_dict_id_name}")
 
-edge_mapping_ios_to_cocoStuff_custom_11_dict_id_name = {}
-for key, value in edge_mapping_ios_to_cocoStuff_custom_11_dict.items():
-    if key == 255: continue
-    edge_mapping_ios_to_cocoStuff_custom_11_dict_id_name[value] = edge_mapping_ios_dict[key]
-print(f"edge_mapping_ios_to_cocoStuff_custom_11_dict_id_name: {edge_mapping_ios_to_cocoStuff_custom_11_dict_id_name}")
+# edge_mapping_ios_to_cocoStuff_custom_11_dict_id_name = {}
+# for key, value in edge_mapping_ios_to_cocoStuff_custom_11_dict.items():
+#     if key == 255: continue
+#     edge_mapping_ios_to_cocoStuff_custom_11_dict_id_name[edge_mapping_ios_dict[key]] = value
+# print(f"edge_mapping_ios_to_cocoStuff_custom_11_dict_id_name: {edge_mapping_ios_to_cocoStuff_custom_11_dict_id_name}")
 
-edge_mapping_ios_to_cocoStuff_custom_9_dict_id_name = {}
-for key, value in edge_mapping_ios_to_cocoStuff_custom_9_dict.items():
-    if key == 255: continue
-    edge_mapping_ios_to_cocoStuff_custom_9_dict_id_name[value] = edge_mapping_ios_dict[key]
-print(f"edge_mapping_ios_to_cocoStuff_custom_9_dict_id_name: {edge_mapping_ios_to_cocoStuff_custom_9_dict_id_name}")
+# edge_mapping_ios_to_cocoStuff_custom_9_dict_id_name = {}
+# for key, value in edge_mapping_ios_to_cocoStuff_custom_9_dict.items():
+#     if key == 255: continue
+#     edge_mapping_ios_to_cocoStuff_custom_9_dict_id_name[edge_mapping_ios_dict[key]] = value 
+# print(f"edge_mapping_ios_to_cocoStuff_custom_9_dict_id_name: {edge_mapping_ios_to_cocoStuff_custom_9_dict_id_name}")
 
 
 

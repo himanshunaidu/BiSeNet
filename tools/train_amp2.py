@@ -21,6 +21,7 @@ import torch.nn as nn
 import torch.distributed as dist
 from torch.utils.data import DataLoader
 import torch.cuda.amp as amp
+from torchinfo import summary
 
 from lib.models import model_factory
 from configs import set_cfg_from_file
@@ -32,6 +33,9 @@ from lib.meters import TimeMeter, AvgMeter
 from lib.logger import setup_logger, log_msg
 
 from tqdm import tqdm
+
+# For fine-tuning
+from lib.models.bisenetv2 import FreezeType
 
 
 ## fix all random seeds
@@ -49,11 +53,13 @@ def parse_args():
     parse.add_argument('--config', dest='config', type=str,
             default='configs/bisenetv2.py',)
     parse.add_argument('--finetune-from', type=str, default=None,)
+    parse.add_argument('--freeze-type', type=str, default="NONE", 
+            choices=[e.value for e in FreezeType],
+            help='freeze type for fine-tuning: all, detail, segment, head, none')
     return parse.parse_args()
 
 args = parse_args()
 cfg = set_cfg_from_file(args.config)
-
 
 def set_model(lb_ignore=255):
     logger = logging.getLogger()
@@ -64,6 +70,8 @@ def set_model(lb_ignore=255):
             map_location='cpu'), strict=False)
         logger.info('\tmissing keys: ' + json.dumps(msg.missing_keys))
         logger.info('\tunexpected keys: ' + json.dumps(msg.unexpected_keys))
+    if args.freeze_type != 'NONE':
+        net.fine_tune_freeze(FreezeType[args.freeze_type])
     if cfg.use_sync_bn: net = nn.SyncBatchNorm.convert_sync_batchnorm(net)
     net.cuda()
     net.train()
@@ -82,6 +90,13 @@ def set_optimizer(model):
     if hasattr(model, 'get_params'):
         wd_params, nowd_params, lr_mul_wd_params, lr_mul_nowd_params = model.get_params()
         #  wd_val = cfg.weight_decay
+        
+        # Filter out frozen parameters
+        wd_params = [p for p in wd_params if p.requires_grad]
+        nowd_params = [p for p in nowd_params if p.requires_grad]
+        lr_mul_wd_params = [p for p in lr_mul_wd_params if p.requires_grad]
+        lr_mul_nowd_params = [p for p in lr_mul_nowd_params if p.requires_grad]
+        
         wd_val = 0
         params_list = [
             {'params': wd_params, },
@@ -96,6 +111,11 @@ def set_optimizer(model):
                 non_wd_params.append(param)
             elif param.dim() == 2 or param.dim() == 4:
                 wd_params.append(param)
+        
+        # Filter out frozen parameters
+        wd_params = [p for p in wd_params if p.requires_grad]
+        non_wd_params = [p for p in non_wd_params if p.requires_grad]        
+        
         params_list = [
             {'params': wd_params, },
             {'params': non_wd_params, 'weight_decay': 0},
@@ -150,6 +170,7 @@ def train():
     scaler = amp.GradScaler()
 
     ## ddp training
+    # if torch.cuda.device_count() > 1:
     net = set_model_dist(net)
 
     ## meters
@@ -195,7 +216,7 @@ def train():
             logger.info(msg)
 
         ## save intermediate model if the validation loss is lower
-        if (it + 1) % 500 == 0:
+        if (it + 1) % 10000 == 0:
             mious, fw_mious, cat_ious, f1_scores, macro_f1, micro_f1 = get_eval_model_results_single_scale(
                 cfg, net.module
             )
@@ -231,9 +252,12 @@ def train():
 
 
 def main():
+    # if torch.cuda.device_count() > 1:
     local_rank = int(os.environ['LOCAL_RANK'])
     torch.cuda.set_device(local_rank)
     dist.init_process_group(backend='nccl')
+    # else:
+    #     torch.cuda.set_device(0)
 
     if not osp.exists(cfg.respth): os.makedirs(cfg.respth)
     setup_logger(f'{cfg.model_type}-{cfg.dataset.lower()}-train', cfg.respth)

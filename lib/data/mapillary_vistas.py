@@ -10,6 +10,7 @@ from torch.utils.data import Dataset, DataLoader
 import torch.distributed as dist
 import cv2
 import numpy as np
+from PIL import Image
 
 import lib.data.transform_cv2 as T
 from lib.data.base_dataset import BaseDataset
@@ -35,7 +36,7 @@ class MapillaryVistas(BaseDataset):
     def __init__(self, dataroot, annpath, trans_func=None, mode='train', **kwargs: BaseDatasetKwargs):
         super(MapillaryVistas, self).__init__(
                 dataroot, annpath, trans_func, mode, **kwargs)
-        self.n_cats = kwargs.get('n_cats', 53)
+        self.n_cats = kwargs.get('n_cats', 11)
         self.lb_ignore = kwargs.get('lb_ignore', 255)
         
         self.custom_mapping_dict = self._get_custom_mappings(**kwargs)
@@ -49,9 +50,10 @@ class MapillaryVistas(BaseDataset):
             else:
                 self.lb_map[ind] = self.lb_ignore
 
+        # TODO: Recalculate mean and std for Mapillary Vistas dataset
         self.to_tensor = T.ToTensor(
-            mean=(0.46962251, 0.4464104,  0.40718787), # coco, rgb
-            std=(0.27469736, 0.27012361, 0.28515933),
+            mean=(0.41663339, 0.45617131, 0.46773973),
+            std=(0.25652909, 0.26454683, 0.29007679),
         )
         
     def _get_custom_mappings(self, **kwargs):
@@ -61,10 +63,16 @@ class MapillaryVistas(BaseDataset):
         if kwargs.get('custom_mapping_dict') is not None:
             return kwargs['custom_mapping_dict']
         
-        custom_mapping_key = kwargs.get('custom_mapping_key', '53')
+        custom_mapping_key = kwargs.get('custom_mapping_key', '11')
         if custom_mapping_key not in custom_mapping_dicts:
             raise ValueError(f"Invalid custom mapping key: {custom_mapping_key}. "
                              f"Available keys are: {list(custom_mapping_dicts.keys())}")
         return custom_mapping_dicts[custom_mapping_key]
     
+    # def get_image(self, impth, lbpth):
+    #     img = cv2.imread(impth)[:, :, ::-1].copy()
+    #     # Label image is paletted, so we need to read it properly
+    #     # label = cv2.imread(lbpth, 0)
+    #     label = np.array(Image.open(lbpth)).astype(np.uint8)
+    #     return img, label
     
