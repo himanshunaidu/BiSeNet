@@ -127,6 +127,7 @@ datasets/ios_point_mapper
 datasets/ios_point_mapper_combined
 datasets/custom_images
 datasets/mapillary_vistas
+datasets/lab_controlled
 pretrained/*
 run.sh
 openvino/build/*

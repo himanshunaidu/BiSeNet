@@ -18,6 +18,7 @@ from lib.data.custom_ios_point_mapper_combined import CustomIOSPointMapperCombin
 from lib.data.mapillary_vistas import MapillaryVistas
 from lib.data.ade20k import ADE20k
 from lib.data.customer_dataset import CustomerDataset
+from lib.data.lab_controlled import LabControlled
 
 
 
