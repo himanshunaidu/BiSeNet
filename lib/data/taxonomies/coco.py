@@ -6,7 +6,8 @@ import os
 if __name__ == '__main__':
     import sys
     sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))))
-from lib.data.taxonomies.classes import SourceClass
+from lib.data.taxonomies.common import SourceClass, ProjectClass
+from lib.data.taxonomies.accessibility_class import AccessibilityClass, ACCESSIBILITY_11_CLASSES, ACCESSIBILITY_12_CLASSES
 
 class CocoStuffClass(Enum):
     PERSON = SourceClass(raw_id=0, name='person')
@@ -70,3 +71,5 @@ class CocoStuffClass(Enum):
     WOOD = SourceClass(raw_id=181, name='wood')
     SKY = SourceClass(raw_id=156, name='sky')
     CLOUDS = SourceClass(raw_id=105, name='clouds')
+    BACKGROUND = SourceClass(raw_id=255, name='background')
+
