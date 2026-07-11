@@ -15,6 +15,7 @@ class AccessibilityClass(Enum):
     POLE = ProjectClass(key="pole", name="Pole")
     TRAFFIC_LIGHT = ProjectClass(key="traffic_light", name="Traffic Light")
     TRAFFIC_SIGN = ProjectClass(key="traffic_sign", name="Traffic Sign")
+    CURB = ProjectClass(key="curb", name="Curb")
     CURB_RAMP = ProjectClass(key="curb_ramp", name="Curb Ramp")
     VEGETATION = ProjectClass(key="vegetation", name="Vegetation")
     TERRAIN = ProjectClass(key="terrain", name="Terrain")
@@ -46,6 +47,22 @@ ACCESSIBILITY_12_CLASSES = (
     AccessibilityClass.POLE,
     AccessibilityClass.TRAFFIC_LIGHT,
     AccessibilityClass.TRAFFIC_SIGN,
+    AccessibilityClass.CURB_RAMP,
+    AccessibilityClass.VEGETATION,
+    AccessibilityClass.TERRAIN,
+    AccessibilityClass.STATIC,
+    AccessibilityClass.DYNAMIC
+)
+
+ACCESSIBILITY_13_CLASSES = (
+    AccessibilityClass.BACKGROUND,
+    AccessibilityClass.ROAD,
+    AccessibilityClass.SIDEWALK,
+    AccessibilityClass.BUILDING,
+    AccessibilityClass.POLE,
+    AccessibilityClass.TRAFFIC_LIGHT,
+    AccessibilityClass.TRAFFIC_SIGN,
+    AccessibilityClass.CURB,
     AccessibilityClass.CURB_RAMP,
     AccessibilityClass.VEGETATION,
     AccessibilityClass.TERRAIN,
