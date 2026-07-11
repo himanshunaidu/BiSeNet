@@ -157,7 +157,7 @@ MAPILLARY_VISTAS_ACCESSIBILITY_13: MappingSpec[MapillaryVistasClass, Accessibili
         name="mapillary_vistas_accessibility_12",
         source_enum=MapillaryVistasClass,
         target_enum=AccessibilityClass,
-        target_classes=ACCESSIBILITY_12_CLASSES,
+        target_classes=ACCESSIBILITY_13_CLASSES,
     )
     .map(MapillaryVistasClass.NATURE_SKY, AccessibilityClass.BACKGROUND)
     .map_many([
@@ -220,3 +220,17 @@ MAPILLARY_VISTAS_ACCESSIBILITY_13: MappingSpec[MapillaryVistasClass, Accessibili
     ], AccessibilityClass.DYNAMIC)
     .build()
 )
+
+if __name__ == "__main__":
+    # Print the mapping specifications for verification
+    print("Mapillary Vistas Accessibility 11 Mapping:")
+    label_map_11 = MAPILLARY_VISTAS_ACCESSIBILITY_11.compile_label_map()
+    print(label_map_11.shape)
+    
+    print("\nMapillary Vistas Accessibility 12 Mapping:")
+    label_map_12 = MAPILLARY_VISTAS_ACCESSIBILITY_12.compile_label_map()
+    print(label_map_12.shape)
+    
+    print("\nMapillary Vistas Accessibility 13 Mapping:")
+    label_map_13 = MAPILLARY_VISTAS_ACCESSIBILITY_13.compile_label_map()
+    print(label_map_13.shape)

@@ -18,18 +18,19 @@ class BaseDatasetKwargs(TypedDict, total=False):
     custom_mapping_key: Optional[str]
     custom_mapping_weights: Optional[list[float]]
     custom_mapping_dict: Optional[dict[int, int]]
+    custom_mapping_spec_key: Optional[str]
 
 class BaseDataset(Dataset):
     '''
     '''
     def __init__(self, dataroot, annpath, trans_func=None, mode='train', *,
-                 n_cats=8, lb_ignore=255, custom_mapping_key=None, custom_mapping_weights=None, custom_mapping_dict=None):
+                 n_cats=8, lb_ignore=255, custom_mapping_key=None, custom_mapping_weights=None, custom_mapping_dict=None, custom_mapping_spec_key=None):
         super(BaseDataset, self).__init__()
         assert mode in ('train', 'val', 'test')
         self.mode = mode
         self.trans_func = trans_func
 
-        self.lb_ignore = -100
+        self.lb_ignore = lb_ignore
         self.lb_map = None
 
         with open(annpath, 'r') as fr:

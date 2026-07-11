@@ -21,6 +21,7 @@ class MappingSpec(Generic[S, T]):
     target_enum: type[T]
     target_classes: tuple[T, ...]
     assignments: dict[S, T]
+    unrepresented_targets: dict[T, str]
     ignore_label: int = IGNORE_LABEL
     
     def __post_init__(self):
@@ -55,8 +56,9 @@ class MappingSpec(Generic[S, T]):
         # self.validate()
         
         if num_source_labels is None:
-            max_raw_id = max(source.value.raw_id for source in self.source_enum)
-            num_source_labels = max_raw_id + 1
+            # max_raw_id = max(source.value.raw_id for source in self.source_enum)
+            # num_source_labels = max_raw_id + 1
+            num_source_labels = 256  # Default to 256 if not provided
         
         lb_map = np.full(num_source_labels, self.ignore_label, dtype=np.uint8)
         target_to_id = self.target_to_train_id
@@ -82,6 +84,15 @@ class MappingSpec(Generic[S, T]):
                     "description": cls.description,
                 }
                 for idx, cls in self.train_id_to_target.items()
+            ],
+            "unrepresented_targets": [
+                {
+                    "key": cls.key,
+                    "name": cls.name,
+                    "description": cls.description,
+                    "reason": reason,
+                }
+                for cls, reason in self.unrepresented_targets.items()
             ],
             "source_to_target": self.source_to_target_report(),
         }

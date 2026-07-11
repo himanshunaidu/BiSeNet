@@ -76,3 +76,17 @@ CITYSCAPES_ACCESSIBILITY_13: MappingSpec[CityscapesClass, AccessibilityClass] = 
     .map_many([CityscapesClass.PERSON, CityscapesClass.RIDER, CityscapesClass.CAR, CityscapesClass.TRUCK, CityscapesClass.BUS, CityscapesClass.TRAIN, CityscapesClass.MOTORCYCLE, CityscapesClass.BICYCLE], AccessibilityClass.DYNAMIC)
     .build()
 )
+
+if __name__ == "__main__":
+    # Print the mapping specifications for verification
+    print("Cityscapes to Accessibility Class Mapping (11 classes):")
+    label_map_11 = CITYSCAPES_ACCESSIBILITY_11.compile_label_map()
+    print(label_map_11.shape)
+    
+    print("\nCityscapes to Accessibility Class Mapping (12 classes):")
+    label_map_12 = CITYSCAPES_ACCESSIBILITY_12.compile_label_map()
+    print(label_map_12.shape)
+    
+    print("\nCityscapes to Accessibility Class Mapping (13 classes):")
+    label_map_13 = CITYSCAPES_ACCESSIBILITY_13.compile_label_map()
+    print(label_map_13.shape)

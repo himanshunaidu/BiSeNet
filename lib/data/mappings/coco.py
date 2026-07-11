@@ -76,3 +76,17 @@ COCO_STUFF_ACCESSIBILITY_13: MappingSpec[CocoStuffClass, AccessibilityClass] = (
     .map_many([CocoStuffClass.PERSON, CocoStuffClass.BICYCLE, CocoStuffClass.CAR, CocoStuffClass.MOTORCYCLE, CocoStuffClass.BUS, CocoStuffClass.TRAIN, CocoStuffClass.TRUCK], AccessibilityClass.DYNAMIC)
     .build()
 )
+
+if __name__ == "__main__":
+    # Print the mapping specifications for verification
+    print("CocoStuff to Accessibility Class Mapping (11 classes):")
+    label_map_11 = COCO_STUFF_ACCESSIBILITY_11.compile_label_map()
+    print(label_map_11.shape)
+    
+    print("\nCocoStuff to Accessibility Class Mapping (12 classes):")
+    label_map_12 = COCO_STUFF_ACCESSIBILITY_12.compile_label_map()
+    print(label_map_12.shape)
+    
+    print("\nCocoStuff to Accessibility Class Mapping (13 classes):")
+    label_map_13 = COCO_STUFF_ACCESSIBILITY_13.compile_label_map()
+    print(label_map_13.shape)
