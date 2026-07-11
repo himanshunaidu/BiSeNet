@@ -140,3 +140,8 @@ log*txt
 000000320425.jpg
 
 tvm/
+
+# VSCode files
+.vscode/
+
+command.txt
