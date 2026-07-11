@@ -125,6 +125,7 @@ datasets/cityscapes_backup
 datasets/custom_edge_mapping
 datasets/ios_point_mapper
 datasets/ios_point_mapper_combined
+datasets/ios_point_mapper_old
 datasets/custom_images
 datasets/mapillary_vistas
 datasets/lab_controlled

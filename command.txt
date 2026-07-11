@@ -1,2 +1,5 @@
 export CUDA_VISIBLE_DEVICES=0
 torchrun --nproc_per_node=1 tools/train_amp2.py --config ./configs/lab_controlled/bisenetv2_lab_controlled.py
+
+export CUDA_VISIBLE_DEVICES=0
+torchrun --nproc_per_node=1 tools/train_amp2.py

@@ -1,4 +1,4 @@
-# This script will later copy images that contain specific class labels from the COCO dataset annotations and past them into a new directory.
+# This script will later copy images that contain specific class labels from the COCO dataset annotations and paste them into a new directory.
 # For now, it will just print the paths of the images that contain the specified class label.
 import glob
 import cv2
