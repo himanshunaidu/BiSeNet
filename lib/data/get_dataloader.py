@@ -44,6 +44,7 @@ def get_data_loader(cfg, mode='train'):
     if hasattr(cfg, 'custom_mapping_key'): kwargs['custom_mapping_key'] = cfg.custom_mapping_key
     if hasattr(cfg, 'custom_mapping_weights'): kwargs['custom_mapping_weights'] = cfg.custom_mapping_weights
     if hasattr(cfg, 'custom_mapping_dict'): kwargs['custom_mapping_dict'] = cfg.custom_mapping_dict
+    if hasattr(cfg, 'custom_mapping_spec_key'): kwargs['custom_mapping_spec_key'] = cfg.custom_mapping_spec_key
     ds = eval(cfg.dataset)(cfg.im_root, annpath, trans_func=trans_func, mode=mode, **kwargs)
 
     if dist.is_initialized():

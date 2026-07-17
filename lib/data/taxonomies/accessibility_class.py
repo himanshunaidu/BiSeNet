@@ -69,3 +69,9 @@ ACCESSIBILITY_13_CLASSES = (
     AccessibilityClass.STATIC,
     AccessibilityClass.DYNAMIC
 )
+
+ACCESSIBILITY_3_CURB_RAMP_CLASSES = (
+    AccessibilityClass.BACKGROUND,
+    AccessibilityClass.SIDEWALK,
+    AccessibilityClass.CURB_RAMP
+)

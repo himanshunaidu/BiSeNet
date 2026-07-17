@@ -20,7 +20,8 @@ from lib.data.base_dataset import BaseDataset, BaseDatasetKwargs
 from lib.data.custom_maps.mapillary_vistas import mapillary_vistas_dict, mapillary_vistas_continuous_49_dict, \
     mapillary_vistas_continuous_11_dict
 from lib.data.mappings.builder import MappingSpec, MappingBuilder
-from lib.data.mappings.mapillary_vistas import MAPILLARY_VISTAS_ACCESSIBILITY_11, MAPILLARY_VISTAS_ACCESSIBILITY_12, MAPILLARY_VISTAS_ACCESSIBILITY_13
+from lib.data.mappings.mapillary_vistas import MAPILLARY_VISTAS_ACCESSIBILITY_11, MAPILLARY_VISTAS_ACCESSIBILITY_12, \
+    MAPILLARY_VISTAS_ACCESSIBILITY_13, MAPILLARY_VISTAS_ACCESSIBILITY_3_CURB_RAMP
     
 '''
 The following dataset is used for Mapillary Vistas dataset with an accessibility mapping.
@@ -34,7 +35,8 @@ custom_mapping_dicts = {
 custom_mapping_specs: dict[str, MappingSpec] = {
     'accessibility_11': MAPILLARY_VISTAS_ACCESSIBILITY_11,
     'accessibility_12': MAPILLARY_VISTAS_ACCESSIBILITY_12,
-    'accessibility_13': MAPILLARY_VISTAS_ACCESSIBILITY_13
+    'accessibility_13': MAPILLARY_VISTAS_ACCESSIBILITY_13,
+    'accessibility_3_curb_ramp': MAPILLARY_VISTAS_ACCESSIBILITY_3_CURB_RAMP
 }
 
 class MapillaryVistas(BaseDataset):

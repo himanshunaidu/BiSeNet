@@ -31,7 +31,26 @@ args = parse.parse_args()
 cfg = set_cfg_from_file(args.config)
 
 
-palette = np.random.randint(0, 256, (256, 3), dtype=np.uint8)
+# palette = np.random.randint(0, 256, (256, 3), dtype=np.uint8)
+# cityscapes palette
+palette_dict = {
+    "background": [0, 0, 0],
+    "road": [128, 64, 128],
+    "sidewalk": [244, 35, 232],
+    "building": [70, 70, 70],
+    "pole": [153, 153, 153],
+    "traffic light": [250, 170, 30],
+    "traffic sign": [220, 220, 0],
+    "curb_ramp": [220, 220, 0],
+    "vegetation": [107, 142, 35],
+    "terrain": [152, 251, 152],
+    "static": [20, 20, 20],
+    "dynamic": [240, 240, 240],
+}
+palette = np.zeros((256, 3), dtype=np.uint8)
+for i, color in enumerate(palette_dict.values()):
+    palette[i] = color
+print("Palette for visualization:", palette[:len(palette_dict)])
 
 # define model
 net = model_factory[cfg.model_type](cfg.n_cats, aux_mode='eval')
@@ -62,4 +81,5 @@ out = out.argmax(dim=1)
 out = out.squeeze().detach().cpu().numpy()
 print(np.unique(out))
 pred = palette[out]
-cv2.imwrite('./res.jpg', pred)
+pred_rgb = cv2.cvtColor(pred, cv2.COLOR_BGR2RGB)
+cv2.imwrite('./res.jpg', pred_rgb)

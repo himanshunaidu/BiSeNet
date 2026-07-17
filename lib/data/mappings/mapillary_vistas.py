@@ -8,7 +8,7 @@ if __name__ == '__main__':
     sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))))
 from lib.data.taxonomies.common import SourceClass, ProjectClass
 from lib.data.taxonomies.mapillary_vistas import MapillaryVistasClass
-from lib.data.taxonomies.accessibility_class import AccessibilityClass, ACCESSIBILITY_11_CLASSES, ACCESSIBILITY_12_CLASSES, ACCESSIBILITY_13_CLASSES
+from lib.data.taxonomies.accessibility_class import AccessibilityClass, ACCESSIBILITY_11_CLASSES, ACCESSIBILITY_12_CLASSES, ACCESSIBILITY_13_CLASSES, ACCESSIBILITY_3_CURB_RAMP_CLASSES
 from lib.data.mappings.builder import MappingSpec, MappingBuilder
 
 MAPILLARY_VISTAS_ACCESSIBILITY_11: MappingSpec[MapillaryVistasClass, AccessibilityClass] = (
@@ -89,7 +89,10 @@ MAPILLARY_VISTAS_ACCESSIBILITY_12: MappingSpec[MapillaryVistasClass, Accessibili
         target_enum=AccessibilityClass,
         target_classes=ACCESSIBILITY_12_CLASSES,
     )
-    .map(MapillaryVistasClass.NATURE_SKY, AccessibilityClass.BACKGROUND)
+    .map_many([
+        MapillaryVistasClass.NATURE_SKY,
+        MapillaryVistasClass.CONSTRUCTION_BARRIER_CURB
+    ], AccessibilityClass.BACKGROUND)
     .map_many([
         MapillaryVistasClass.CONSTRUCTION_FLAT_ROAD, MapillaryVistasClass.CONSTRUCTION_FLAT_ROAD_SHOULDER,
         ## markings
@@ -101,7 +104,7 @@ MAPILLARY_VISTAS_ACCESSIBILITY_12: MappingSpec[MapillaryVistasClass, Accessibili
         MapillaryVistasClass.MARKING_DISCRETE_SYMBOL_OTHER, MapillaryVistasClass.MARKING_DISCRETE_TEXT, 
         MapillaryVistasClass.MARKING_ONLY_CONTINUOUS_DASHED, MapillaryVistasClass.MARKING_ONLY_DISCRETE_OTHER_MARKING, MapillaryVistasClass.MARKING_ONLY_DISCRETE_TEXT,
         ## curb
-        MapillaryVistasClass.CONSTRUCTION_BARRIER_CURB
+        # MapillaryVistasClass.CONSTRUCTION_BARRIER_CURB
     ], AccessibilityClass.ROAD)
     .map_many([
         MapillaryVistasClass.CONSTRUCTION_FLAT_PEDESTRIAN_AREA, MapillaryVistasClass.CONSTRUCTION_FLAT_SIDEWALK,
@@ -218,6 +221,21 @@ MAPILLARY_VISTAS_ACCESSIBILITY_13: MappingSpec[MapillaryVistasClass, Accessibili
         MapillaryVistasClass.OBJECT_SIGN_ADVERTISEMENT, MapillaryVistasClass.OBJECT_SIGN_AMBIGUOUS, MapillaryVistasClass.OBJECT_SIGN_BACK, 
         MapillaryVistasClass.OBJECT_SIGN_INFORMATION, MapillaryVistasClass.OBJECT_SIGN_OTHER, MapillaryVistasClass.OBJECT_SIGN_STORE
     ], AccessibilityClass.DYNAMIC)
+    .build()
+)
+
+MAPILLARY_VISTAS_ACCESSIBILITY_3_CURB_RAMP: MappingSpec[MapillaryVistasClass, AccessibilityClass] = (
+    MappingBuilder(
+        name="mapillary_vistas_accessibility_3_curb_ramp",
+        source_enum=MapillaryVistasClass,
+        target_enum=AccessibilityClass,
+        target_classes=ACCESSIBILITY_3_CURB_RAMP_CLASSES,
+    )
+    .map(MapillaryVistasClass.NATURE_SKY, AccessibilityClass.BACKGROUND)
+    .map_many([
+        MapillaryVistasClass.CONSTRUCTION_FLAT_PEDESTRIAN_AREA, MapillaryVistasClass.CONSTRUCTION_FLAT_SIDEWALK,
+    ], AccessibilityClass.SIDEWALK)
+    .map(MapillaryVistasClass.CONSTRUCTION_FLAT_CURB_CUT, AccessibilityClass.CURB_RAMP)
     .build()
 )
 

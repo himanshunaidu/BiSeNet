@@ -21,7 +21,7 @@ from lib.data.custom_maps.ios_point_mapper import ios_point_mapper_dict, \
     ios_point_mapper_to_cocoStuff_custom_9_dict
 from lib.data.mappings.builder import MappingSpec, MappingBuilder
 from lib.data.mappings.ios_point_mapper import IOS_POINT_MAPPER_ACCESSIBILITY_11, IOS_POINT_MAPPER_ACCESSIBILITY_12, \
-    IOS_POINT_MAPPER_ACCESSIBILITY_13
+    IOS_POINT_MAPPER_ACCESSIBILITY_13, IOS_POINT_MAPPER_ACCESSIBILITY_3_CURB_RAMP
 
 '''
 The following dataset is used for the custom annotated iOSPointMapper dataset with an accessibility mapping.
@@ -36,7 +36,8 @@ custom_mapping_dicts = {
 custom_mapping_specs: dict[str, MappingSpec] = {
     'accessibility_11': IOS_POINT_MAPPER_ACCESSIBILITY_11,
     'accessibility_12': IOS_POINT_MAPPER_ACCESSIBILITY_12,
-    'accessibility_13': IOS_POINT_MAPPER_ACCESSIBILITY_13
+    'accessibility_13': IOS_POINT_MAPPER_ACCESSIBILITY_13,
+    'accessibility_3_curb_ramp': IOS_POINT_MAPPER_ACCESSIBILITY_3_CURB_RAMP
 }
 
 class CustomIOSPointMapper(BaseDataset):
@@ -83,6 +84,7 @@ class CustomIOSPointMapper(BaseDataset):
         """
         # if kwargs.get('custom_mapping_spec_key') is not None:
         spec_key = kwargs.get('custom_mapping_spec_key', 'accessibility_11')
+        print(f"Using custom mapping spec key: {spec_key}")
         return self._get_custom_mapping_from_spec(spec_key)
         
         # if kwargs.get('custom_mapping_dict') is not None:
