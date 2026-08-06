@@ -40,10 +40,11 @@ IOS_POINT_MAPPER_ACCESSIBILITY_12: MappingSpec[iOSPointMapperClass, Accessibilit
         target_classes=ACCESSIBILITY_12_CLASSES,
     )
     .map_many([
-        iOSPointMapperClass.BACKGROUND,
-        iOSPointMapperClass.CURB
+        iOSPointMapperClass.BACKGROUND
     ], AccessibilityClass.BACKGROUND)
-    .map(iOSPointMapperClass.ROAD, AccessibilityClass.ROAD)
+    .map_many([
+        iOSPointMapperClass.ROAD, iOSPointMapperClass.CROSSWALK, iOSPointMapperClass.CURB
+    ], AccessibilityClass.ROAD)
     .map(iOSPointMapperClass.SIDEWALK, AccessibilityClass.SIDEWALK)
     .map(iOSPointMapperClass.BUILDING, AccessibilityClass.BUILDING)
     .map(iOSPointMapperClass.POLE, AccessibilityClass.POLE)
@@ -67,7 +68,9 @@ IOS_POINT_MAPPER_ACCESSIBILITY_13: MappingSpec[iOSPointMapperClass, Accessibilit
         target_classes=ACCESSIBILITY_13_CLASSES,
     )
     .map(iOSPointMapperClass.BACKGROUND, AccessibilityClass.BACKGROUND)
-    .map(iOSPointMapperClass.ROAD, AccessibilityClass.ROAD)
+    .map_many([
+        iOSPointMapperClass.ROAD, iOSPointMapperClass.CROSSWALK, iOSPointMapperClass.CURB
+    ], AccessibilityClass.ROAD)
     .map(iOSPointMapperClass.SIDEWALK, AccessibilityClass.SIDEWALK)
     .map(iOSPointMapperClass.BUILDING, AccessibilityClass.BUILDING)
     .map(iOSPointMapperClass.POLE, AccessibilityClass.POLE)
@@ -102,13 +105,13 @@ IOS_POINT_MAPPER_ACCESSIBILITY_3_CURB_RAMP: MappingSpec[iOSPointMapperClass, Acc
 if __name__ == "__main__":
     # Print the mapping specifications for verification
     print("iOS Point Mapper to Accessibility Class Mapping (11 classes):")
-    label_map_11 = IOS_POINT_MAPPER_ACCESSIBILITY_11.compile_label_map()
-    print(label_map_11.shape)
+    label_map_11 = IOS_POINT_MAPPER_ACCESSIBILITY_11.compile_class_name_label_map()
+    print(label_map_11)
     
     print("\niOS Point Mapper to Accessibility Class Mapping (12 classes):")
-    label_map_12 = IOS_POINT_MAPPER_ACCESSIBILITY_12.compile_label_map()
-    print(label_map_12.shape)
+    label_map_12 = IOS_POINT_MAPPER_ACCESSIBILITY_12.compile_class_name_label_map()
+    print(label_map_12)
     
     print("\niOS Point Mapper to Accessibility Class Mapping (13 classes):")
-    label_map_13 = IOS_POINT_MAPPER_ACCESSIBILITY_13.compile_label_map()
-    print(label_map_13.shape)
+    label_map_13 = IOS_POINT_MAPPER_ACCESSIBILITY_13.compile_class_name_label_map()
+    print(label_map_13)

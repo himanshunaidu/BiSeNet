@@ -101,6 +101,9 @@ class Metrics(object):
         f1_scores = (2 * macro_precision * macro_recall) / (
                 macro_precision + macro_recall + eps)
         macro_f1 = f1_scores.nanmean(dim=0)
+        
+        precision_scores = macro_precision.tolist()
+        recall_scores = macro_recall.tolist()
 
         # micro f1 score
         tps_ = tps.sum(dim=0)
@@ -117,6 +120,8 @@ class Metrics(object):
                 miou=miou.item(),
                 fw_miou=fw_miou.item(),
                 f1_scores=f1_scores.tolist(),
+                precision_scores=precision_scores,
+                recall_scores=recall_scores,
                 macro_f1=macro_f1.item(),
                 micro_f1=micro_f1.item(),
                 )
@@ -288,6 +293,7 @@ class MscEvalCrop(object):
 
 
 def print_res_table(tname, heads, weights, metric, cat_metric):
+    print(metric)
     heads = [tname, 'ratio'] + heads
     lines = []
     for k, v in metric.items():
@@ -313,6 +319,7 @@ def eval_model(cfg, net):
 
     heads, mious, fw_mious, cat_ious = [], [], [], []
     f1_scores, macro_f1, micro_f1 = [], [], []
+    precision_scores, recall_scores = [], []
     logger = logging.getLogger()
 
     size_processor = SizePreprocessor(
@@ -337,6 +344,8 @@ def eval_model(cfg, net):
     f1_scores.append(metrics['f1_scores'])
     macro_f1.append(metrics['macro_f1'])
     micro_f1.append(metrics['micro_f1'])
+    precision_scores.append(metrics['precision_scores'])
+    recall_scores.append(metrics['recall_scores'])
 
     # single_crop = MscEvalCrop(
     #         n_classes=cfg.n_cats,
@@ -401,9 +410,13 @@ def eval_model(cfg, net):
     metric = dict(macro_f1=macro_f1, micro_f1=micro_f1)
     f1_heads, f1_content = print_res_table('f1 score', heads,
             weights, metric, f1_scores)
+    precision_heads, precision_content = print_res_table('precision', heads,
+            weights, dict(), precision_scores)
+    recall_heads, recall_content = print_res_table('recall', heads,
+            weights, dict(), recall_scores)
 
     net.aux_mode = org_aux
-    return iou_heads, iou_content, f1_heads, f1_content
+    return iou_heads, iou_content, f1_heads, f1_content, precision_heads, precision_content, recall_heads, recall_content
 
 @torch.no_grad()
 def get_eval_model_results_single_scale(cfg, net):
@@ -451,6 +464,56 @@ def get_eval_model_results_single_scale(cfg, net):
 
     net.aux_mode = org_aux
     return mious, fw_mious, cat_ious, f1_scores, macro_f1, micro_f1
+
+@torch.no_grad()
+def get_eval_model_results_single_scale_2(cfg, net):
+    """
+    Get the evaluation results of the model.
+    Currently, only returns the results of the single scale evaluation.
+    Args:
+        cfg: The configuration object.
+        net: The model to be evaluated.
+    """
+    org_aux = net.aux_mode
+    net.aux_mode = 'eval'
+    net.eval()
+
+    is_dist = dist.is_initialized()
+    dl = get_data_loader(cfg, mode='val')
+    lb_ignore = dl.dataset.lb_ignore
+
+    heads, mious, fw_mious, cat_ious = [], [], [], []
+    f1_scores, macro_f1, micro_f1 = [], [], []
+    precision_scores, recall_scores = [], []
+    logger = logging.getLogger()
+
+    size_processor = SizePreprocessor(
+            cfg.get('eval_start_shape'),
+            cfg.get('eval_start_shortside'),
+            cfg.get('eval_start_longside'),
+            )
+
+    single_scale = MscEvalV0(
+            n_classes=cfg.n_cats,
+            scales=(1., ),
+            flip=False,
+            lb_ignore=lb_ignore,
+            size_processor=size_processor
+    )
+    logger.info('compute single scale metrics')
+    metrics = single_scale(net, dl)
+    heads.append('ss')
+    mious.append(metrics['miou'])
+    fw_mious.append(metrics['fw_miou'])
+    cat_ious.append(metrics['ious'])
+    f1_scores.append(metrics['f1_scores'])
+    macro_f1.append(metrics['macro_f1'])
+    micro_f1.append(metrics['micro_f1'])
+    precision_scores.append(metrics['precision_scores'])
+    recall_scores.append(metrics['recall_scores'])
+
+    net.aux_mode = org_aux
+    return mious, fw_mious, cat_ious, f1_scores, macro_f1, micro_f1, precision_scores, recall_scores
 
 
 def evaluate(cfg, weight_pth):

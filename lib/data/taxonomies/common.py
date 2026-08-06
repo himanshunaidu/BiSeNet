@@ -14,4 +14,9 @@ class ProjectClass:
     name: str
     description: str = ""
 
+@dataclass(frozen=True)
+class ColorClass:
+    project_class: ProjectClass
+    rgb: np.ndarray
+
 IGNORE_LABEL = 255

@@ -70,6 +70,12 @@ class MappingSpec(Generic[S, T]):
             lb_map[raw_id] = train_id
         return lb_map
     
+    def compile_class_name_label_map(self) -> dict[str, int]:
+        """
+        Returns a dictionary mapping each class name to its corresponding train ID.
+        """
+        return {cls.value.name: idx for idx, cls in enumerate(self.target_classes)}
+    
     def get_report(self) -> dict:
         return {
             "mapping_name": self.name,

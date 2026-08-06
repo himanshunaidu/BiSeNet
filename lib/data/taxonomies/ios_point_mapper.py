@@ -43,3 +43,4 @@ class iOSPointMapperClass(Enum):
     TUNNEL = SourceClass(raw_id=31, name='tunnel')
     VEGETATION = SourceClass(raw_id=32, name='vegetation')
     WALL = SourceClass(raw_id=33, name='wall')
+    

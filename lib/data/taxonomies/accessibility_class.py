@@ -2,11 +2,12 @@ from dataclasses import dataclass
 from enum import Enum
 
 import os
+import numpy as np
 
 if __name__ == '__main__':
     import sys
     sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))))
-from lib.data.taxonomies.common import SourceClass, ProjectClass
+from lib.data.taxonomies.common import SourceClass, ProjectClass, ColorClass
 
 class AccessibilityClass(Enum):
     ROAD = ProjectClass(key="road", name="Road")
@@ -24,6 +25,28 @@ class AccessibilityClass(Enum):
     STATIC = ProjectClass(key="static", name="Static Object")
     DYNAMIC = ProjectClass(key="dynamic", name="Dynamic Object")
     BACKGROUND = ProjectClass(key="background", name="Background")
+    
+class AccessibilityColorClassDefault(Enum):
+    """
+    Matches the cityscapes color scheme where possible.    
+    Matches the custom ios_point_mapper color scheme where possible.
+    """
+    ROAD = ColorClass(project_class=AccessibilityClass.ROAD, rgb=np.array([128, 64, 128]))
+    SIDEWALK = ColorClass(project_class=AccessibilityClass.SIDEWALK, rgb=np.array([244, 35, 232]))
+    BUILDING = ColorClass(project_class=AccessibilityClass.BUILDING, rgb=np.array([70, 70, 70]))
+    WALL = ColorClass(project_class=AccessibilityClass.WALL, rgb=np.array([102, 102, 156]))
+    FENCE = ColorClass(project_class=AccessibilityClass.FENCE, rgb=np.array([190, 153, 153]))
+    POLE = ColorClass(project_class=AccessibilityClass.POLE, rgb=np.array([153, 153, 153]))
+    TRAFFIC_LIGHT = ColorClass(project_class=AccessibilityClass.TRAFFIC_LIGHT, rgb=np.array([250, 170, 30]))
+    TRAFFIC_SIGN = ColorClass(project_class=AccessibilityClass.TRAFFIC_SIGN, rgb=np.array([220, 220, 0]))
+    VEGETATION = ColorClass(project_class=AccessibilityClass.VEGETATION, rgb=np.array([107, 142, 35]))
+    TERRAIN = ColorClass(project_class=AccessibilityClass.TERRAIN, rgb=np.array([152, 251, 152]))
+    STATIC = ColorClass(project_class=AccessibilityClass.STATIC, rgb=np.array([70, 130, 180]))
+    DYNAMIC = ColorClass(project_class=AccessibilityClass.DYNAMIC, rgb=np.array([220, 20, 60]))
+    BACKGROUND = ColorClass(project_class=AccessibilityClass.BACKGROUND, rgb=np.array([0, 0, 0]))
+    CURB = ColorClass(project_class=AccessibilityClass.CURB, rgb=np.array([204, 51, 102]))
+    CURB_RAMP = ColorClass(project_class=AccessibilityClass.CURB_RAMP, rgb=np.array([255, 255, 0]))
+    
 
 ACCESSIBILITY_11_CLASSES = (
     AccessibilityClass.BACKGROUND,
@@ -75,3 +98,9 @@ ACCESSIBILITY_3_CURB_RAMP_CLASSES = (
     AccessibilityClass.SIDEWALK,
     AccessibilityClass.CURB_RAMP
 )
+
+if __name__ == "__main__":
+    color_classes = {cls.value.project_class.name: cls for cls in AccessibilityColorClassDefault}
+    
+    color_classes_colors = {name: cls.value.rgb for name, cls in color_classes.items()}
+    print(color_classes_colors)

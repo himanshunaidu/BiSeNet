@@ -173,9 +173,60 @@ torchrun \
 tools/train_amp2.py --config ./configs/mapillary_accessibility_3_curb_ramp/bisenetv2_mapillary_accessibility_ios_point_mapper.py --finetune-from ./res/curb_ramp/bisenetv2_mapillary_accessibility_stage_2/model_final.pth
 ```
 
+```bash
+export CUDA_VISIBLE_DEVICES=1
+torchrun \
+--nnodes=1 \
+--nproc_per_node=1 \
+--rdzv-backend=c10d \
+--rdzv-endpoint=localhost:0 \
+--rdzv-id=train_gpu0 \
+tools/train_amp2.py --config ./configs/mapillary_accessibility_3_curb_ramp/bisenetv2_mapillary_accessibility_stage_2.py &&
+torchrun \
+--nnodes=1 \
+--nproc_per_node=1 \
+--rdzv-backend=c10d \
+--rdzv-endpoint=localhost:0 \
+--rdzv-id=train_gpu0 \
+tools/train_amp2.py --config ./configs/mapillary_accessibility_3_curb_ramp/bisenetv2_mapillary_accessibility_ios_point_mapper.py --finetune-from ./res/curb_ramp/bisenetv2_mapillary_accessibility_stage_2/model_final.pth
+```
+
+#### Running short 12 class full training loop coco-stuff
+
+```bash
+export CUDA_VISIBLE_DEVICES=2
+torchrun \
+--nnodes=1 \
+--nproc_per_node=1 \
+--rdzv-backend=c10d \
+--rdzv-endpoint=localhost:0 \
+--rdzv-id=train_gpu0 \
+tools/train_amp2.py --config ./configs/coco_accessibility_12/bisenetv2_coco_accessibility_stage_1.py &&
+torchrun \
+--nnodes=1 \
+--nproc_per_node=1 \
+--rdzv-backend=c10d \
+--rdzv-endpoint=localhost:0 \
+--rdzv-id=train_gpu0 \
+tools/train_amp2.py --config ./configs/coco_accessibility_12/bisenetv2_coco_accessibility_stage_2.py --finetune-from ./res/coco/bisenetv2_coco_accessibility_stage_1/model_final.pth &&
+torchrun \
+--nnodes=1 \
+--nproc_per_node=1 \
+--rdzv-backend=c10d \
+--rdzv-endpoint=localhost:0 \
+--rdzv-id=train_gpu0 \
+tools/train_amp2.py --config ./configs/coco_accessibility_12/bisenetv2_coco_ios_point_mapper.py --finetune-from ./res/coco/bisenetv2_coco_accessibility_stage_2/model_final.pth
+```
+
 
 2. Run inference on a single image
 
 ```bash
 python tools/demo.py --config ./configs/mapillary_accessibility_12_short_0/bisenetv2_mapillary_accessibility_ios_point_mapper.py --weight-path ./res/bisenetv2_mapillary_accessibility_ios_point_mapper_short_0/model_final.pth --img-path ./datasets/ios_point_mapper/leftImg8bit/default/3d543e4362_frame_000000_leftImg8bit.png
+```
+
+3. Convert to coreml
+
+```bash
+python tools/convert_to_coreml.py --config ./configs/mapillary_accessibility_12_short_0/bisenetv2_mapillary_accessibility_ios_point_mapper.py --weight-path ./res/bisenetv2_mapillary_accessibility_ios_point_mapper_short_0/model_final.pth --img-path ./datasets/custom_images/test.jpg --outpath ./res_coreml/bisenetv2_mapillary_accessibility_ios_point_mapper_short_0_model.mlpackage
 ```

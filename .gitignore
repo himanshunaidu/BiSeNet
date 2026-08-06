@@ -107,6 +107,7 @@ venv.bak/
 play.py
 preprocess_data.py
 res/
+res_coreml/
 backup/
 *.zip
 adj.md

@@ -26,7 +26,7 @@ from torchinfo import summary
 from lib.models import model_factory
 from configs import set_cfg_from_file
 from lib.data import get_data_loader
-from evaluate import eval_model, get_eval_model_results_single_scale
+from evaluate import eval_model, get_eval_model_results_single_scale, get_eval_model_results_single_scale_2
 from lib.ohem_ce_loss import OhemCELoss, OhemCEWeightedLoss
 from lib.lr_scheduler import WarmupPolyLrScheduler
 from lib.meters import TimeMeter, AvgMeter
@@ -217,7 +217,7 @@ def train():
 
         ## save intermediate model if the validation loss is lower
         if (it + 1) % 10000 == 0:
-            mious, fw_mious, cat_ious, f1_scores, macro_f1, micro_f1 = get_eval_model_results_single_scale(
+            mious, fw_mious, cat_ious, f1_scores, macro_f1, micro_f1, precision_scores, recall_scores = get_eval_model_results_single_scale_2(
                 cfg, net.module
             )
             val_miou = sum(mious) / len(mious)
@@ -242,9 +242,13 @@ def train():
 
     logger.info('\nevaluating the final model')
     torch.cuda.empty_cache()
-    iou_heads, iou_content, f1_heads, f1_content = eval_model(cfg, net.module)
+    iou_heads, iou_content, f1_heads, f1_content, precision_heads, precision_content, recall_heads, recall_content = eval_model(cfg, net.module)
     logger.info('\neval results of f1 score metric:')
     logger.info('\n' + tabulate(f1_content, headers=f1_heads, tablefmt='orgtbl'))
+    logger.info('\neval results of precision metric:')
+    logger.info('\n' + tabulate(precision_content, headers=precision_heads, tablefmt='orgtbl'))
+    logger.info('\neval results of recall metric:')
+    logger.info('\n' + tabulate(recall_content, headers=recall_heads, tablefmt='orgtbl'))
     logger.info('\neval results of miou metric:')
     logger.info('\n' + tabulate(iou_content, headers=iou_heads, tablefmt='orgtbl'))
 
